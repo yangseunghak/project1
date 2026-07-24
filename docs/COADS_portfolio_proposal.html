@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COADS Portfolio Proposal</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    :root { --ink: #07090d; --navy: #071b45; --blue: #2f6bff; --mist: #eef3ff; --line: #d9dfeb; --text: #1d2430; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #b8bfcc; color: var(--text); font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", Arial, sans-serif; }
+    .page { position: relative; width: 210mm; height: 297mm; overflow: hidden; padding: 19mm 18mm; background: #fff; page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+    .eyebrow { margin: 0 0 8px; color: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: .16em; }
+    .page-no { position: absolute; right: 18mm; bottom: 13mm; color: #7c8491; font-family: Arial, sans-serif; font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+    h1, h2, h3, p { margin-top: 0; }
+    h2 { margin-bottom: 18px; color: var(--ink); font-size: 33px; line-height: 1.15; letter-spacing: -.05em; }
+    h3 { margin-bottom: 8px; color: var(--ink); font-size: 17px; line-height: 1.3; letter-spacing: -.03em; }
+    p { font-size: 12px; line-height: 1.75; word-break: keep-all; }
+    .cover { display: flex; flex-direction: column; justify-content: space-between; padding: 22mm 18mm 18mm; background: var(--ink); color: #fff; }
+    .cover::after { content: ""; position: absolute; right: -48mm; bottom: -50mm; width: 165mm; height: 165mm; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; }
+    .cover-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; }
+    .cover-brand { color: #fff; font-size: 17px; font-weight: 900; letter-spacing: .1em; }
+    .cover-type { color: rgba(255,255,255,.55); font-size: 10px; font-weight: 700; letter-spacing: .14em; }
+    .cover-main { position: relative; z-index: 1; }
+    .cover h1 { max-width: 150mm; margin: 0; color: #fff; font-size: 61px; font-weight: 900; line-height: .96; letter-spacing: -.07em; }
+    .cover h1 em { color: var(--blue); font-style: normal; }
+    .cover-sub { max-width: 93mm; margin: 22px 0 0; color: rgba(255,255,255,.68); font-size: 14px; line-height: 1.65; }
+    .cover-bottom { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,.25); padding-top: 10px; }
+    .cover-bottom span { color: rgba(255,255,255,.65); font-size: 10px; font-weight: 700; }
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 26px; }
+    .section-head p { max-width: 67mm; margin: 0; color: #667080; font-size: 11px; line-height: 1.6; }
+    .lead { max-width: 130mm; margin: 0 0 26px; color: #37404e; font-size: 17px; font-weight: 600; line-height: 1.65; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .panel { min-height: 75px; border: 1px solid var(--line); padding: 15px; }
+    .panel p { margin: 0; color: #5e6877; font-size: 11px; line-height: 1.65; }
+    .number { margin-bottom: 18px; color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+    .problem { display: grid; grid-template-columns: 1fr 1fr; gap: 42px; margin-top: 18px; }
+    .problem-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+    .problem-list li { padding: 14px 0; border-bottom: 1px solid var(--line); color: #303847; font-size: 13px; font-weight: 600; line-height: 1.45; }
+    .quote { display: flex; min-height: 232px; align-items: flex-end; padding: 23px; background: var(--navy); color: #fff; }
+    .quote strong { display: block; font-size: 29px; line-height: 1.2; letter-spacing: -.06em; }
+    .quote em { color: #8db5ff; font-style: normal; }
+    .audience { display: grid; grid-template-columns: 1.05fr .95fr; min-height: 166px; background: var(--mist); }
+    .audience > div { padding: 22px; }
+    .audience .label { color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+    .audience strong { display: block; margin-top: 34px; color: var(--ink); font-size: 25px; line-height: 1.18; letter-spacing: -.05em; }
+    .audience p { margin: 17px 0 0; font-size: 11px; }
+    .persona { border-left: 1px solid #cad5ee; }
+    .tag { display: inline-block; margin: 0 5px 5px 0; padding: 6px 8px; border: 1px solid #b5c2dd; border-radius: 999px; color: #32405a; font-size: 9px; font-weight: 700; }
+    .brand-board { display: grid; grid-template-columns: 1.3fr .7fr; gap: 12px; }
+    .brand-card { min-height: 172px; padding: 20px; background: #090b0f; color: #fff; }
+    .brand-card.blue { background: var(--blue); }
+    .brand-card.light { background: var(--mist); color: var(--ink); }
+    .brand-card p { margin: 0; color: inherit; font-size: 11px; opacity: .76; }
+    .brand-card strong { display: block; margin-top: 52px; font-size: 25px; line-height: 1.12; letter-spacing: -.05em; }
+    .font-sample { margin-top: 37px; font-size: 33px; font-weight: 900; letter-spacing: -.06em; }
+    .color-chip { display: flex; height: 42px; margin-top: 28px; }
+    .color-chip span { flex: 1; }
+    .ia { display: grid; grid-template-columns: 1fr 24px 1fr 24px 1fr; align-items: center; margin-top: 41px; }
+    .ia-box { min-height: 96px; padding: 17px; background: var(--ink); color: #fff; }
+    .ia-box strong { display: block; margin-bottom: 8px; font-size: 16px; }
+    .ia-box p { margin: 0; color: rgba(255,255,255,.62); font-size: 10px; line-height: 1.5; }
+    .ia-arrow { color: var(--blue); text-align: center; font-size: 19px; font-weight: 900; }
+    .flow { display: grid; grid-template-columns: 30mm 1fr; border-top: 1px solid var(--ink); }
+    .flow-item { display: contents; }
+    .flow-label, .flow-content { min-height: 48px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .flow-label { color: var(--blue); font-family: Arial, sans-serif; font-size: 10px; font-weight: 900; letter-spacing: .12em; }
+    .flow-content { color: #303847; font-size: 13px; font-weight: 700; }
+    .screen { position: relative; overflow: hidden; min-height: 202px; background: #060606; color: #fff; }
+    .screen img { width: 100%; height: 100%; object-fit: cover; opacity: .48; filter: saturate(.72); }
+    .screen-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 19px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.82)); }
+    .screen-overlay strong { font-size: 21px; line-height: 1.1; letter-spacing: -.05em; }
+    .screen-overlay em { color: #8db5ff; font-style: normal; }
+    .screen-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 12px; }
+    .screen-small { min-height: 95px; margin-bottom: 12px; }
+    .screen-small:last-child { margin-bottom: 0; }
+    .interaction { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 23px; border-top: 1px solid var(--ink); }
+    .interaction div { min-height: 103px; padding: 14px 13px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .interaction div:last-child { border-right: 0; }
+    .interaction span { color: var(--blue); font-size: 10px; font-weight: 900; }
+    .interaction strong { display: block; margin-top: 22px; color: var(--ink); font-size: 14px; letter-spacing: -.04em; }
+    .tech { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .tech-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+    .tech-list li { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--line); color: #303847; font-size: 12px; font-weight: 700; }
+    .tech-list small { color: #7a8493; font-size: 10px; font-weight: 600; }
+    .result { display: grid; grid-template-columns: 1.45fr .55fr; gap: 12px; }
+    .result-main { min-height: 223px; padding: 24px; background: var(--navy); color: #fff; }
+    .result-main p { max-width: 98mm; margin: 52px 0 0; color: rgba(255,255,255,.72); font-size: 15px; font-weight: 600; line-height: 1.6; }
+    .result-main strong { font-size: 26px; letter-spacing: -.05em; }
+    .result-side { display: flex; flex-direction: column; justify-content: space-between; padding: 20px; background: var(--blue); color: #fff; }
+    .result-side strong { font-size: 38px; letter-spacing: -.07em; }
+    .result-side span { font-size: 11px; font-weight: 700; line-height: 1.5; }
+    .closing { display: flex; height: 100%; flex-direction: column; justify-content: space-between; background: var(--ink); color: #fff; }
+    .closing h2 { max-width: 140mm; margin: 0; color: #fff; font-size: 48px; letter-spacing: -.07em; }
+    .closing h2 em { color: var(--blue); font-style: normal; }
+    .closing p { max-width: 95mm; margin: 0; color: rgba(255,255,255,.66); font-size: 14px; }
+    .closing-line { width: 100%; border-top: 1px solid rgba(255,255,255,.26); }
+    @media screen { .page { margin: 12px auto; box-shadow: 0 20px 50px rgba(0,0,0,.16); } }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <div class="cover-top"><div class="cover-brand">COADS</div><div class="cover-type">WEB DESIGN &amp; DEVELOPMENT PORTFOLIO</div></div>
+    <div class="cover-main"><h1>Digital Risk<br><em>Intelligence</em><br>for Brands.</h1><p class="cover-sub">온라인 평판과 여론 리스크를 분석하고, 브랜드가 신뢰를 지킬 수 있는 대응 구조를 설계하는 COADS 웹사이트 프로젝트입니다.</p></div>
+    <div class="cover-bottom"><span>PORTFOLIO PROJECT</span><span>2026.07 / YANG SEUNGHAK</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">01 / PROJECT OVERVIEW</p>
+    <div class="section-head"><h2>프로젝트 개요</h2><p>디지털 환경 속 평판 리스크를 다루는 전문 기업의 브랜드 웹사이트를 기획하고 디자인, 개발했습니다.</p></div>
+    <p class="lead">COADS는 복잡한 온라인 이슈를 빠르게 파악하고, 데이터 기반의 대응 방향을 제시하는 디지털 리스크 인텔리전스 브랜드입니다.</p>
+    <div class="grid-2">
+      <article class="panel"><div class="number">PROJECT TYPE</div><h3>Corporate Website Renewal</h3><p>브랜드 포지셔닝과 서비스 이해도를 높이는 기업 홈페이지 구축</p></article>
+      <article class="panel"><div class="number">ROLE</div><h3>Planning / UIUX / Front-end</h3><p>정보 구조, 비주얼 시스템, 인터랙션, 반응형 구현 전반 담당</p></article>
+      <article class="panel"><div class="number">KEYWORD</div><h3>Clear, Credible, Dynamic</h3><p>신뢰감 있는 정보 전달과 과하지 않은 움직임의 균형</p></article>
+      <article class="panel"><div class="number">GOAL</div><h3>Trust Through Structure</h3><p>서비스와 대응 프로세스를 명확하게 이해시키는 경험 설계</p></article>
+    </div>
+    <span class="page-no">01</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">02 / BACKGROUND &amp; GOAL</p>
+    <div class="section-head"><h2>문제는 복잡하지만,<br>전달은 명확해야 합니다.</h2><p>리스크 관리 서비스는 전문성이 높아 자칫 어렵고 폐쇄적으로 보일 수 있습니다.</p></div>
+    <div class="problem">
+      <ul class="problem-list"><li>보안 솔루션처럼 보이는 무거운 인상</li><li>서비스 간 관계가 한눈에 들어오지 않는 구조</li><li>전문 용어 중심의 낮은 접근성</li><li>모바일 환경에서 약해지는 정보 위계</li></ul>
+      <div class="quote"><strong>COADS를 <em>위험을 설명하는 회사</em>가 아닌,<br>대응의 방향을 설계하는<br>전략 파트너로 정의했습니다.</strong></div>
+    </div>
+    <span class="page-no">02</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">03 / TARGET</p>
+    <div class="section-head"><h2>신뢰를 지켜야 하는<br>조직을 위한 경험</h2><p>리스크가 곧 브랜드 가치에 영향을 미치는 의사결정자와 실무자를 주요 사용자로 설정했습니다.</p></div>
+    <div class="audience"><div><span class="label">PRIMARY TARGET</span><strong>브랜드 신뢰를<br>관리해야 하는 조직</strong></div><div class="persona"><p>법무법인, 병원, 엔터테인먼트, 소비자 브랜드 등 온라인 이슈에 민감하고 신속한 판단이 필요한 기업</p><div><span class="tag">경영진</span><span class="tag">홍보·마케팅</span><span class="tag">법무·컴플라이언스</span><span class="tag">운영 담당자</span></div></div></div>
+    <div class="grid-3" style="margin-top:12px"><article class="panel"><h3>빠른 맥락 파악</h3><p>현재 어떤 상황인지, 왜 대응해야 하는지 즉시 이해할 수 있어야 합니다.</p></article><article class="panel"><h3>전문성의 신뢰</h3><p>과장된 보안 이미지를 피하고 정제된 정보 구조로 역량을 보여 줍니다.</p></article><article class="panel"><h3>명확한 다음 행동</h3><p>서비스 탐색 후 상담과 문의로 자연스럽게 이어지는 흐름을 설계합니다.</p></article></div>
+    <span class="page-no">03</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">04 / BRAND STRATEGY</p>
+    <div class="section-head"><h2>보이지 않는 위험을<br>읽을 수 있게.</h2><p>브랜드 메시지를 구성하는 언어, 색상, 타이포그래피를 하나의 원칙으로 정리했습니다.</p></div>
+    <div class="brand-board"><article class="brand-card"><p>BRAND MESSAGE</p><strong>Read the risk.<br><span style="color:#8db5ff">Design the response.</span></strong></article><article class="brand-card blue"><p>COLOR SYSTEM</p><div class="color-chip"><span style="background:#2f6bff"></span><span style="background:#8db5ff"></span><span style="background:#fff"></span></div><strong style="font-size:17px">Trust Blue</strong></article><article class="brand-card light"><p>TYPOGRAPHY</p><div class="font-sample">COADS</div><strong style="margin-top:14px;font-size:16px">Bold, direct, modern</strong></article><article class="brand-card"><p>TONE &amp; MANNER</p><strong style="font-size:19px">Quiet confidence.<br>Structured clarity.</strong></article></div>
+    <span class="page-no">04</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">05 / INFORMATION ARCHITECTURE</p>
+    <div class="section-head"><h2>한 번의 스크롤로<br>브랜드를 이해하는 흐름</h2><p>방문자가 브랜드의 목적부터 서비스, 솔루션, 문의까지 점진적으로 확신을 얻도록 구성했습니다.</p></div>
+    <div class="ia"><div class="ia-box"><strong>WHY COADS</strong><p>브랜드가 해결하는 문제와 핵심 관점</p></div><div class="ia-arrow">→</div><div class="ia-box"><strong>OUR SERVICES</strong><p>리스크를 관리하는 4가지 서비스</p></div><div class="ia-arrow">→</div><div class="ia-box"><strong>OUR SOLUTIONS</strong><p>상황에 따른 구체적 대응 구조</p></div></div>
+    <div class="flow" style="margin-top:42px"><div class="flow-item"><div class="flow-label">01</div><div class="flow-content">Hero / 브랜드의 역할을 한 문장으로 전달</div></div><div class="flow-item"><div class="flow-label">02</div><div class="flow-content">Why COADS / 전문성과 차별점에 대한 근거 제시</div></div><div class="flow-item"><div class="flow-label">03</div><div class="flow-content">Services / 탐지, 분석, 대응, 관리의 프로세스 설명</div></div><div class="flow-item"><div class="flow-label">04</div><div class="flow-content">Solutions, Clients, FAQ / 신뢰 형성과 전환 유도</div></div><div class="flow-item"><div class="flow-label">05</div><div class="flow-content">Contact &amp; Footer / 문의 행동 및 기업 정보 제공</div></div></div>
+    <span class="page-no">05</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">06 / VISUAL DIRECTION</p>
+    <div class="section-head"><h2>정보의 밀도는 높게,<br>화면은 시원하게.</h2><p>검은 배경과 절제된 블루를 기반으로, 카드보다 넓은 에디토리얼 구성을 우선했습니다.</p></div>
+    <div class="screen-grid"><div class="screen"><img src="../public/service-visuals/monitoring.png" alt="" /><div class="screen-overlay"><strong>OUR <em>SERVICES</em><br>Editorial layout</strong></div></div><div><div class="screen screen-small"><img src="../public/service-visuals/analysis.png" alt="" /><div class="screen-overlay"><strong style="font-size:15px">Data-led<br>visual language</strong></div></div><div class="screen screen-small"><img src="../public/service-visuals/reputation.png" alt="" /><div class="screen-overlay"><strong style="font-size:15px">Trust-focused<br>experience</strong></div></div></div></div>
+    <div class="grid-3" style="margin-top:12px"><article class="panel"><h3>High Contrast</h3><p>흑백 대비로 정보의 위계를 선명하게 만듭니다.</p></article><article class="panel"><h3>Controlled Blue</h3><p>핵심 메시지와 인터랙션에만 블루를 사용합니다.</p></article><article class="panel"><h3>Editorial Space</h3><p>여백과 큰 타이포그래피로 프리미엄 인상을 만듭니다.</p></article></div>
+    <span class="page-no">06</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">07 / INTERACTION DESIGN</p>
+    <div class="section-head"><h2>스크롤은 전환을 위한<br>이야기의 속도입니다.</h2><p>움직임을 장식으로 사용하지 않고, 정보의 등장 순서와 집중도를 제어하는 장치로 사용했습니다.</p></div>
+    <div class="interaction"><div><span>01</span><strong>Hero Reveal</strong></div><div><span>02</span><strong>Section Typography</strong></div><div><span>03</span><strong>Service Focus</strong></div><div><span>04</span><strong>Solution Transition</strong></div></div>
+    <div class="grid-2" style="margin-top:32px"><article class="panel"><h3>스크롤 타이포그래피</h3><p>WHY COADS, OUR SERVICES, OUR SOLUTIONS와 같은 핵심 섹션명을 진입 시 크게 노출하고 다음 콘텐츠로 전환합니다.</p></article><article class="panel"><h3>서비스 이미지 전환</h3><p>행에 마우스를 올리면 해당 서비스 이미지가 부드럽게 전환되며, 일부 항목은 확장 후 영상이 재생됩니다.</p></article><article class="panel"><h3>솔루션 카드 흐름</h3><p>활성 카드에 집중시키고 이전 카드는 주변에 흐릿하게 남겨 과정의 연결감을 유지합니다.</p></article><article class="panel"><h3>접근성 고려</h3><p>움직임 최소화 환경에서는 애니메이션을 축소하고, 모바일에서는 콘텐츠 우선의 일반 흐름으로 재배치했습니다.</p></article></div>
+    <span class="page-no">07</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">08 / RESPONSIVE &amp; DEVELOPMENT</p>
+    <div class="section-head"><h2>화면이 작아져도<br>메시지는 작아지지 않게.</h2><p>데스크톱의 몰입형 연출을 유지하면서도 모바일에서는 읽기와 탐색이 우선되는 구조로 전환했습니다.</p></div>
+    <div class="tech"><div><h3>Responsive Strategy</h3><ul class="tech-list"><li>Desktop <small>스크롤 핀·에디토리얼 그리드</small></li><li>Tablet <small>콘텐츠 비율 재조정</small></li><li>Mobile <small>세로 흐름·터치 우선</small></li><li>Motion <small>reduced motion 대응</small></li></ul></div><div><h3>Tech Stack</h3><ul class="tech-list"><li>Next.js <small>App Router</small></li><li>React <small>Component architecture</small></li><li>GSAP <small>ScrollTrigger motion</small></li><li>CSS <small>Responsive UI system</small></li></ul></div></div>
+    <div class="quote" style="min-height:210px;margin-top:32px;background:#2f6bff"><strong>하나의 화면을 축소하는 대신,<br>각 디바이스에 맞는 <em style="color:#071b45">읽는 방식</em>을<br>새로 설계했습니다.</strong></div>
+    <span class="page-no">08</span>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">09 / EXPECTED OUTCOME</p>
+    <div class="section-head"><h2>전문성은 더 선명하게,<br>문의의 장벽은 더 낮게.</h2><p>브랜드의 신뢰도를 높이고 서비스의 이해와 전환을 동시에 개선하는 것을 목표로 했습니다.</p></div>
+    <div class="result"><div class="result-main"><strong>Expected Impact</strong><p>COADS가 제공하는 탐지, 분석, 대응, 평판 관리의 흐름을 직관적으로 설명하여 복잡한 리스크 관리 서비스를 이해하기 쉬운 브랜드 경험으로 전환합니다.</p></div><div class="result-side"><strong>01</strong><span>브랜드<br>신뢰도 강화</span><strong>02</strong><span>서비스<br>이해도 개선</span></div></div>
+    <div class="grid-3" style="margin-top:12px"><article class="panel"><h3>명확한 포지셔닝</h3><p>단순 모니터링 업체가 아닌 전략적 리스크 파트너로 인식</p></article><article class="panel"><h3>일관된 경험</h3><p>웹 전반의 타이포, 컬러, 모션을 하나의 언어로 통일</p></article><article class="panel"><h3>전환 구조 확보</h3><p>콘텐츠 탐색 이후 FAQ와 문의로 이어지는 자연스러운 동선</p></article></div>
+    <span class="page-no">09</span>
+  </section>
+
+  <section class="page closing">
+    <p class="eyebrow" style="color:#8db5ff">10 / PROJECT REVIEW</p>
+    <h2>Risk is complex.<br><em>Experience</em> should not be.</h2>
+    <div><div class="closing-line"></div><p style="margin-top:18px">COADS 프로젝트는 전문적인 디지털 리스크 관리 서비스를 어렵지 않게 전달하기 위해, 브랜드 전략과 인터랙션 디자인, 반응형 구현을 하나의 경험으로 연결한 웹 포트폴리오 프로젝트입니다.</p><p style="margin-top:22px;color:#fff;font-weight:800">COADS / WEB DESIGN &amp; DEVELOPMENT PORTFOLIO</p></div>
+  </section>
+</body>
+</html>
