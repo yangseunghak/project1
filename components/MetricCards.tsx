@@ -147,7 +147,7 @@ export function MetricCards() {
     <div ref={ref} className="metric-panel container-wide">
       <div className="metric-about-intro" aria-label="WHY COADS">
         <span>WHY?</span>
-        <strong>COADS</strong>
+        <strong>&nbsp;COADS</strong>
       </div>
 
       <div className="metric-about">

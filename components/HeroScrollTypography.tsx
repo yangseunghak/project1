@@ -33,6 +33,10 @@ export function HeroScrollTypography() {
 
       const desktop = window.matchMedia("(min-width: 768px)").matches;
 
+      if (!desktop) {
+        gsap.set(phrases[0], { autoAlpha: 1, scaleY: 1 });
+      }
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: hero,

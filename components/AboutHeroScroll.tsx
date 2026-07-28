@@ -66,6 +66,7 @@ export function AboutHeroScroll() {
     };
 
     void loadFrames();
+
     return () => { cancelled = true; };
   }, []);
 
@@ -89,7 +90,8 @@ export function AboutHeroScroll() {
       const finalProtection = hero.querySelector<HTMLElement>(".about-final-protection");
       const mascotStage = hero.querySelector<HTMLElement>(".about-mascot-stage");
       const mascot = hero.querySelector<HTMLElement>(".about-mascot");
-      if (!weSee || !whatOthers || !miss || !title || !nightStage || !car || !sceneWipe || !finalCopy || !finalTrust || !finalStatement || !finalProtection || !mascotStage || !mascot) return;
+      const rope = hero.querySelector<HTMLElement>(".about-rope-drop");
+      if (!weSee || !whatOthers || !miss || !title || !nightStage || !car || !sceneWipe || !finalCopy || !finalTrust || !finalStatement || !finalProtection || !mascotStage || !mascot || !rope) return;
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const lines = [weSee, whatOthers, miss];
@@ -109,6 +111,7 @@ export function AboutHeroScroll() {
         gsap.set(finalProtection, { autoAlpha: 0 });
         gsap.set(mascotStage, { autoAlpha: 1 });
         gsap.set(mascot, { autoAlpha: 1, xPercent: 0, yPercent: 12, scale: 1 });
+        gsap.set(rope, { autoAlpha: 1, scaleY: 1 });
         return;
       }
 
@@ -123,6 +126,7 @@ export function AboutHeroScroll() {
       gsap.set(finalProtection, { autoAlpha: 0, y: 36, willChange: "transform, opacity" });
       gsap.set(mascotStage, { autoAlpha: 0 });
       gsap.set(mascot, { autoAlpha: 0, xPercent: 125, yPercent: 12, scale: 1, willChange: "transform, opacity" });
+      gsap.set(rope, { autoAlpha: 0, scaleY: 0, transformOrigin: "top center", willChange: "transform, opacity" });
 
       const timeline = gsap.timeline({
         scrollTrigger: {
@@ -159,7 +163,15 @@ export function AboutHeroScroll() {
           duration: 1.45,
           ease: "none",
           onUpdate() { updateMascotFrame(this.targets()[0].progress); }
-        }, "<");
+        }, "<")
+        .to(rope, {
+          autoAlpha: 1,
+          scaleY: 1,
+          duration: 1.12,
+          ease: "power2.in"
+        })
+        .to(mascot, { xPercent: 2, yPercent: 25, rotation: 2, duration: 0.68, ease: "power2.inOut" })
+        .to(rope, { scaleY: 1.12, y: 16, duration: 0.68, ease: "power2.inOut" }, "<");
 
     }, hero);
 
@@ -219,6 +231,7 @@ export function AboutHeroScroll() {
       </div>
       <div className="about-mascot-stage" aria-hidden="true">
         <canvas ref={mascotCanvasRef} className="about-mascot" />
+        <div className="about-rope-drop" />
       </div>
     </section>
   );

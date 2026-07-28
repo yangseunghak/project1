@@ -182,9 +182,9 @@ export function SolutionsShowcase() {
         </h2>
 
         <div className="solutions-heading">
-          <h3 className="solutions-title">
-            상황에 따라 다른<br />
-            <strong>대응 구조</strong>가 필요합니다
+          <h3 className="solutions-title" aria-label="모든 이슈에 같은 대응은 통하지 않습니다">
+            <span className="solutions-copy-desktop">모든 이슈에 같은<br />대응은 통하지 않습니다</span>
+            <span className="solutions-copy-mobile">모든 이슈에<br />같은 대응은<br />통하지 않습니다</span>
           </h3>
         </div>
 

@@ -37,7 +37,7 @@ export function Header() {
         </Link>
         <nav className="header-contrast hidden items-center gap-12 lg:flex" aria-label="Main navigation">
           {navItems.map((item) => (
-            <Link key={item.href} className={`nav-link ${pathname === item.href ? "active" : ""}`} href={item.href}>
+            <Link key={item.href} className={`nav-link ${item.href === "/insights" ? "insights-nav-link" : ""} ${pathname === item.href ? "active" : ""}`} href={item.href}>
               {item.label}
             </Link>
           ))}

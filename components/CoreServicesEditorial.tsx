@@ -185,38 +185,31 @@ export function CoreServicesEditorial() {
       });
 
       media.add("(max-width: 760px)", () => {
-        const introTimeline = gsap.timeline({
+        const timeline = gsap.timeline({
           scrollTrigger: {
-            trigger: intro,
+            trigger: root,
             start: "top top",
-            end: "+=420",
+            end: "+=1580",
             pin: true,
-            pinSpacing: false,
+            pinSpacing: true,
             scrub: 0.8,
             invalidateOnRefresh: true
           }
         });
 
-        introTimeline
-          .fromTo(intro, { autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" }, {
+        timeline
+          .set(intro, { autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" })
+          .set(layout, { autoAlpha: 0, y: 0 })
+          .to(intro, {
             autoAlpha: 0,
             y: -36,
             scale: 0.94,
             filter: "blur(8px)",
+            duration: 0.72,
             ease: "power2.inOut"
-          });
-
-        gsap.fromTo(root.querySelectorAll(".services-editorial-heading, .services-editorial-visual, .services-editorial-row"),
-          { autoAlpha: 0, y: 22 },
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.55,
-            stagger: 0.08,
-            ease: "power3.out",
-            scrollTrigger: { trigger: root, start: "top 76%", once: true }
-          }
-        );
+          })
+          .to(layout, { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, 0.62)
+          .to({}, { duration: 1.15 });
       });
 
       return () => media.revert();
@@ -229,7 +222,7 @@ export function CoreServicesEditorial() {
     <section ref={ref} className="services-editorial" aria-labelledby="services-title" style={{ minHeight: "100svh", padding: 0 }}>
       <div className="services-scroll-intro" aria-hidden>
         <span>OUR</span>
-        <strong>SERVICES</strong>
+        <strong>&nbsp;SERVICE</strong>
       </div>
       <div className="container-wide services-editorial-layout" style={{ position: "absolute", inset: 0, margin: "auto", alignContent: "center", padding: "clamp(72px, 8vh, 110px) 0" }}>
         <header className="services-editorial-heading">
