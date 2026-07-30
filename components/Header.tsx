@@ -12,6 +12,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const isHomeTop = pathname === "/" && !scrolled && !open;
+  const headerNavItems = navItems.filter((item) => item.href !== "/insights");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -21,6 +22,22 @@ export function Header() {
   }, []);
 
   useEffect(() => setOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const closeOnDesktop = () => {
+      if (window.innerWidth >= 1024) setOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("resize", closeOnDesktop);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("resize", closeOnDesktop);
+    };
+  }, [open]);
 
   return (
     <header className={`site-header fixed inset-x-0 top-0 z-50 translate-y-0 border-b border-transparent bg-transparent transition-all duration-500 ${isHomeTop ? "py-8" : "py-4"}`}>
@@ -36,8 +53,8 @@ export function Header() {
           />
         </Link>
         <nav className="header-contrast hidden items-center gap-12 lg:flex" aria-label="Main navigation">
-          {navItems.map((item) => (
-            <Link key={item.href} className={`nav-link ${item.href === "/insights" ? "insights-nav-link" : ""} ${pathname === item.href ? "active" : ""}`} href={item.href}>
+          {headerNavItems.map((item) => (
+            <Link key={item.href} className={`nav-link ${pathname === item.href ? "active" : ""}`} href={item.href}>
               {item.label}
             </Link>
           ))}
@@ -58,10 +75,10 @@ export function Header() {
         </button>
       </div>
       {open && (
-        <div className="fixed inset-0 top-[73px] z-40 bg-[#071A2B] lg:hidden">
-          <nav className="container-wide flex h-full flex-col justify-center gap-6" aria-label="Mobile navigation">
-            {navItems.map((item) => (
-              <Link key={item.href} className="border-b border-white/20 py-4 text-3xl font-black text-white" href={item.href}>
+        <div className="fixed inset-0 z-40 h-[100dvh] overflow-y-auto bg-black/95 pt-24 backdrop-blur-xl lg:hidden">
+          <nav className="container-wide flex min-h-full flex-col justify-center gap-3 pb-10" aria-label="Mobile navigation">
+            {headerNavItems.map((item) => (
+              <Link key={item.href} className={`border-b py-5 text-[clamp(30px,9vw,48px)] font-black leading-none tracking-normal text-white transition-colors ${pathname === item.href ? "border-[#2f6bff] text-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)}>
                 {item.label}
               </Link>
             ))}
