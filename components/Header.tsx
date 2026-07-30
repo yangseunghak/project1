@@ -75,10 +75,16 @@ export function Header() {
         </button>
       </div>
       {open && (
-        <div className="mobile-menu-panel fixed inset-0 z-40 h-[100dvh] overflow-y-auto bg-black pt-24 lg:hidden">
-          <nav className="container-wide flex min-h-full flex-col justify-center gap-3 pb-10" aria-label="Mobile navigation">
+        <div className="mobile-menu-panel fixed inset-0 z-[60] h-[100dvh] overflow-y-auto lg:hidden" style={{ backgroundColor: "#030303" }}>
+          <div className="container-wide flex items-center justify-between pt-6">
+            <Image src="/logo/coads-logo-mark.png" alt="COADS" width={505} height={120} className="h-7 w-auto brightness-0 invert" />
+            <button className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/35 text-white" onClick={() => setOpen(false)} aria-label="Close menu">
+              <X size={22} aria-hidden />
+            </button>
+          </div>
+          <nav className="container-wide flex min-h-[calc(100dvh-76px)] flex-col justify-center gap-3 pb-10" aria-label="Mobile navigation">
             {headerNavItems.map((item) => (
-              <Link key={item.href} className={`mobile-menu-link border-b py-5 text-[clamp(30px,9vw,48px)] font-black leading-none tracking-normal transition-colors ${pathname === item.href ? "border-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)}>
+              <Link key={item.href} className={`mobile-menu-link border-b py-5 text-[clamp(30px,9vw,48px)] font-black leading-none tracking-normal transition-colors ${pathname === item.href ? "border-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)} style={{ color: "#fff" }}>
                 {item.label}
               </Link>
             ))}
