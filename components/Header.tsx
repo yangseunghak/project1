@@ -40,7 +40,7 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className={`site-header fixed inset-x-0 top-0 z-50 translate-y-0 border-b border-transparent bg-transparent transition-all duration-500 ${isHomeTop ? "py-8" : "py-4"}`}>
+    <header className={`site-header fixed inset-x-0 top-0 z-50 translate-y-0 border-b border-transparent bg-transparent transition-all duration-500 ${open ? "mobile-menu-active" : ""} ${isHomeTop ? "py-8" : "py-4"}`}>
       <div className="container-wide flex items-center justify-between gap-8">
         <Link href="/" className="header-contrast flex min-h-11 items-center cursor-pointer" aria-label="Go to COADS home">
           <Image
@@ -75,10 +75,10 @@ export function Header() {
         </button>
       </div>
       {open && (
-        <div className="fixed inset-0 z-40 h-[100dvh] overflow-y-auto bg-black/95 pt-24 backdrop-blur-xl lg:hidden">
+        <div className="mobile-menu-panel fixed inset-0 z-40 h-[100dvh] overflow-y-auto bg-black pt-24 lg:hidden">
           <nav className="container-wide flex min-h-full flex-col justify-center gap-3 pb-10" aria-label="Mobile navigation">
             {headerNavItems.map((item) => (
-              <Link key={item.href} className={`border-b py-5 text-[clamp(30px,9vw,48px)] font-black leading-none tracking-normal text-white transition-colors ${pathname === item.href ? "border-[#2f6bff] text-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)}>
+              <Link key={item.href} className={`mobile-menu-link border-b py-5 text-[clamp(30px,9vw,48px)] font-black leading-none tracking-normal transition-colors ${pathname === item.href ? "border-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)}>
                 {item.label}
               </Link>
             ))}

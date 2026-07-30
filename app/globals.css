@@ -146,6 +146,14 @@ img { max-width: 100%; display: block; }
   mix-blend-mode: difference;
 }
 
+.mobile-menu-active .header-contrast {
+  mix-blend-mode: normal;
+}
+
+.mobile-menu-link {
+  color: #fff !important;
+}
+
 .coads-footer {
   position: fixed;
   right: 0;
