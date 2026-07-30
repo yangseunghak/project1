@@ -465,19 +465,21 @@ img { max-width: 100%; display: block; }
   max-width: none;
 }
 
-.about-rope-drop {
+.about-rope-frame,
+.about-mascot-ready {
   position: absolute;
-  z-index: 2;
-  top: 0;
-  left: calc(50% + min(18vw, 145px));
-  width: 18px;
-  height: min(72svh, 640px);
+  z-index: 4;
+  inset: 0;
+  width: min(78vw, 760px);
+  height: min(92svh, 760px);
+  margin: auto;
   max-width: none;
   pointer-events: none;
-  border-inline: 1px solid rgba(55,34,14,.78);
-  border-radius: 999px;
-  background: repeating-linear-gradient(135deg, #d8b46c 0 7px, #75511f 7px 10px, #e6ca8b 10px 14px);
-  transform-origin: top center;
+}
+
+.about-mascot-ready {
+  width: min(62vw, 760px);
+  height: auto;
 }
 
 .about-hero-content {
@@ -665,7 +667,9 @@ img { max-width: 100%; display: block; }
   .about-final-statement p br,
   .about-final-protection p br { display: none; }
   .about-mascot { width: min(132vw, 560px); }
-  .about-rope-drop { left: 68%; width: 14px; height: min(62svh, 440px); }
+  .about-rope-frame,
+  .about-mascot-ready { width: min(112vw, 560px); height: min(84svh, 560px); }
+  .about-mascot-ready { width: min(132vw, 560px); height: auto; }
   .about-hero-message > span:nth-child(2) { margin-left: clamp(18px, 8vw, 48px); }
   .about-hero-message i { margin-left: clamp(18px, 5vw, 34px); }
   .about-hero-message > strong { margin-left: clamp(42px, 18vw, 108px); }

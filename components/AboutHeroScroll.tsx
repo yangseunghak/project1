@@ -20,7 +20,8 @@ export function AboutHeroScroll() {
     const loadFrames = async () => {
       const response = await fetch("/coads-mascot-fly-in.gif");
       const source = await response.arrayBuffer();
-      const frames = decompressFrames(parseGIF(source), true) as GifFrame[];
+      // The source GIF's final frames contain an opaque matte. Frame 0-3 are the clean rope-pull sequence.
+      const frames = (decompressFrames(parseGIF(source), true) as GifFrame[]).slice(0, 4);
       if (cancelled || frames.length === 0) return;
 
       const width = Math.max(...frames.map((frame) => frame.dims.left + frame.dims.width));
@@ -90,8 +91,10 @@ export function AboutHeroScroll() {
       const finalProtection = hero.querySelector<HTMLElement>(".about-final-protection");
       const mascotStage = hero.querySelector<HTMLElement>(".about-mascot-stage");
       const mascot = hero.querySelector<HTMLElement>(".about-mascot");
-      const rope = hero.querySelector<HTMLElement>(".about-rope-drop");
-      if (!weSee || !whatOthers || !miss || !title || !nightStage || !car || !sceneWipe || !finalCopy || !finalTrust || !finalStatement || !finalProtection || !mascotStage || !mascot || !rope) return;
+      const mascotReady = hero.querySelector<HTMLElement>(".about-mascot-ready");
+      const ropeFrames = gsap.utils.toArray<HTMLElement>(".about-rope-pull-frame", hero);
+      const rope = hero.querySelector<HTMLElement>(".about-fixed-rope");
+      if (!weSee || !whatOthers || !miss || !title || !nightStage || !car || !sceneWipe || !finalCopy || !finalTrust || !finalStatement || !finalProtection || !mascotStage || !mascot || !mascotReady || !rope || ropeFrames.length !== 4) return;
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const lines = [weSee, whatOthers, miss];
@@ -110,8 +113,11 @@ export function AboutHeroScroll() {
         gsap.set(finalStatement, { autoAlpha: 0 });
         gsap.set(finalProtection, { autoAlpha: 0 });
         gsap.set(mascotStage, { autoAlpha: 1 });
-        gsap.set(mascot, { autoAlpha: 1, xPercent: 0, yPercent: 12, scale: 1 });
-        gsap.set(rope, { autoAlpha: 1, scaleY: 1 });
+        gsap.set(mascot, { autoAlpha: 0 });
+        gsap.set(mascotReady, { autoAlpha: 0 });
+        gsap.set(rope, { autoAlpha: 1, xPercent: 3.4, yPercent: -16.4, scaleY: 0.835 });
+        gsap.set(ropeFrames, { autoAlpha: 0 });
+        gsap.set(ropeFrames[3], { autoAlpha: 1, xPercent: 3.4, yPercent: -16.4 });
         return;
       }
 
@@ -126,7 +132,9 @@ export function AboutHeroScroll() {
       gsap.set(finalProtection, { autoAlpha: 0, y: 36, willChange: "transform, opacity" });
       gsap.set(mascotStage, { autoAlpha: 0 });
       gsap.set(mascot, { autoAlpha: 0, xPercent: 125, yPercent: 12, scale: 1, willChange: "transform, opacity" });
-      gsap.set(rope, { autoAlpha: 0, scaleY: 0, transformOrigin: "top center", willChange: "transform, opacity" });
+      gsap.set(mascotReady, { autoAlpha: 0, willChange: "opacity" });
+      gsap.set(rope, { autoAlpha: 0, xPercent: 3.4, yPercent: -16.4, scaleY: 0, transformOrigin: "top center", willChange: "transform, opacity" });
+      gsap.set(ropeFrames, { autoAlpha: 0, xPercent: 3.4, yPercent: -16.4, willChange: "transform, opacity" });
 
       const timeline = gsap.timeline({
         scrollTrigger: {
@@ -164,14 +172,18 @@ export function AboutHeroScroll() {
           ease: "none",
           onUpdate() { updateMascotFrame(this.targets()[0].progress); }
         }, "<")
-        .to(rope, {
-          autoAlpha: 1,
-          scaleY: 1,
-          duration: 1.12,
-          ease: "power2.in"
-        })
-        .to(mascot, { xPercent: 2, yPercent: 25, rotation: 2, duration: 0.68, ease: "power2.inOut" })
-        .to(rope, { scaleY: 1.12, y: 16, duration: 0.68, ease: "power2.inOut" }, "<");
+        .to(mascot, { yPercent: 0, autoAlpha: 0, duration: 0.18, ease: "power1.out" }, "+=0.04")
+        .to(mascotReady, { autoAlpha: 1, duration: 0.18, ease: "power1.out" }, "<")
+        .to(rope, { autoAlpha: 1, scaleY: 0.835, duration: 0.82, ease: "power2.in" }, "<+0.08")
+        .to(mascotReady, { autoAlpha: 0, duration: 0.16, ease: "power1.in" }, "+=0.14")
+        .set(rope, { autoAlpha: 0 })
+        .set(ropeFrames[0], { autoAlpha: 1 })
+        .set(ropeFrames[0], { autoAlpha: 0 }, "+=0.32")
+        .set(ropeFrames[1], { autoAlpha: 1 }, "<")
+        .set(ropeFrames[1], { autoAlpha: 0 }, "+=0.32")
+        .set(ropeFrames[2], { autoAlpha: 1 }, "<")
+        .set(ropeFrames[2], { autoAlpha: 0 }, "+=0.32")
+        .set(ropeFrames[3], { autoAlpha: 1 }, "<");
 
     }, hero);
 
@@ -231,7 +243,11 @@ export function AboutHeroScroll() {
       </div>
       <div className="about-mascot-stage" aria-hidden="true">
         <canvas ref={mascotCanvasRef} className="about-mascot" />
-        <div className="about-rope-drop" />
+        <img className="about-mascot-ready" src="/coads-mascot-ready.png" alt="" />
+        <img className="about-rope-frame about-fixed-rope" src="/coads-rope-drop-8.png" alt="" />
+        {[0, 1, 2, 3].map((frame) => (
+          <img key={frame} className="about-rope-frame about-rope-pull-frame" src={`/coads-rope-pull-${frame}.png`} alt="" />
+        ))}
       </div>
     </section>
   );
