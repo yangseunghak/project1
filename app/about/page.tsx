@@ -19,7 +19,7 @@ export default function AboutPage() {
               <strong>STARTS HERE.</strong>
             </h2>
           </div>
-          <ButtonLink href="/contact" variant="blue">START A PROJECT</ButtonLink>
+          <ButtonLink href="/COADS_회사소개서.pdf" variant="blue" download>회사 소개서 다운로드</ButtonLink>
         </div>
       </section>
     </main>
