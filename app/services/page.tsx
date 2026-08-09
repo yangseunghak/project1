@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { ClientInquiryStack } from "@/components/ClientInquiryStack";
+import { SearchSignalDemo } from "@/components/SearchSignalDemo";
 import { ServiceProblemReveal } from "@/components/ServiceProblemReveal";
 import { services } from "@/data/site";
 
@@ -17,9 +17,9 @@ const reviewSignals = [
 export default function ServicesPage() {
   return (
     <main className="coads-services-page">
-      <ServiceProblemReveal />
+      <SearchSignalDemo />
 
-      <ClientInquiryStack />
+      <ServiceProblemReveal />
 
       <section className="services-page-signals">
         <div className="container-wide services-page-signal-list">

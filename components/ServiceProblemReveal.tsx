@@ -41,8 +41,8 @@ export function ServiceProblemReveal() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=14000",
-          scrub: 3,
+          end: "+=9200",
+          scrub: 1.2,
           pin: true,
           pinSpacing: true,
           invalidateOnRefresh: true,
