@@ -4,10 +4,10 @@ import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { monitoringStages } from "@/components/ServiceMonitoringScroll";
+import { CoadsLabBooklet } from "@/components/CoadsLabBooklet";
 
 export function ServiceProblemReveal() {
   const ref = useRef<HTMLElement>(null);
-
   useLayoutEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -68,26 +68,58 @@ export function ServiceProblemReveal() {
           .to(focuses[nextIndex - 1], { autoAlpha: 0, duration: 0.75, ease: "power2.out" }, "<")
           .to(focuses[nextIndex], { autoAlpha: 1, duration: 1.2, ease: "power2.out" }, "<+0.12")
           .to(images, { scale: stage.zoom, transformOrigin: stage.position, duration: 1.4, ease: "power2.out" }, "<")
-          .call(() => setActiveIndex(nextIndex))
           .to({}, { duration: 3.5 });
+      });
+
+      timeline.eventCallback("onUpdate", () => {
+        let brightestIndex = 0;
+        let brightestOpacity = -1;
+
+        focuses.forEach((focus, index) => {
+          const opacity = Number(gsap.getProperty(focus, "opacity"));
+          if (opacity > brightestOpacity) {
+            brightestOpacity = opacity;
+            brightestIndex = index;
+          }
+        });
+
+        setActiveIndex(brightestIndex);
       });
     }, root);
 
-    return () => context.revert();
+    return () => {
+      context.revert();
+    };
   }, []);
 
   return (
     <section ref={ref} id="services-detail" className="services-page-problem" aria-labelledby="services-problem-title">
-      <div className="services-page-problem-lab" aria-hidden="true">
+      <div className="services-page-problem-lab">
         <div className="monitoring-scroll-media">
           <img className="monitoring-scroll-image monitoring-scroll-base" src="/coads-service-monitoring.png" alt="" />
           {monitoringStages.map((stage) => (
-            <div key={stage.focusClass} className={`monitoring-scroll-focus ${stage.focusClass}`}>
+            <div
+              key={stage.focusClass}
+              className={`monitoring-scroll-focus ${stage.focusClass}`}
+            >
               <img className="monitoring-scroll-image" src="/coads-service-monitoring.png" alt="" />
             </div>
           ))}
         </div>
         <div className="monitoring-scroll-overlay" />
+        <div className="monitoring-scroll-hotspots">
+          {monitoringStages.map((stage, index) => (
+            <button
+              type="button"
+              key={stage.focusClass}
+              className={`monitoring-scroll-hotspot ${stage.focusClass}`}
+              aria-label={`STEP ${String(index + 1).padStart(2, "0")} LAB 페이지 펼치기`}
+            />
+          ))}
+        </div>
+        {monitoringStages.map((stage, index) => (
+          <CoadsLabBooklet key={`booklet-${stage.focusClass}`} activeStep={index} open={false} />
+        ))}
         <div className="monitoring-scroll-steps">
           {monitoringStages.map((stage, index) => (
             <article className="monitoring-scroll-copy" key={stage.title}>

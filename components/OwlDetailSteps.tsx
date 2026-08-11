@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock3, Eye, FileText, Heart, Link2, MessageCircle, Newspaper, Search, Share2, SquarePlay, UsersRound } from "lucide-react";
@@ -16,8 +16,40 @@ const channelData = [
 
 const stepTabs = ["01", "02", "03", "04"];
 
+const labBooklets = [
+  {
+    step: "01",
+    title: "COLLECT",
+    koreanTitle: "온라인 게시물 수집",
+    summary: "채널별로 흩어진 언급을 빠짐없이 모으고, 확인 가능한 원문을 먼저 보존합니다.",
+    details: ["검색 결과", "커뮤니티", "SNS · 뉴스"],
+  },
+  {
+    step: "02",
+    title: "REVIEW",
+    koreanTitle: "게시물 내용 확인",
+    summary: "작성 시점과 핵심 주장, 반복되는 표현과 반응의 맥락을 함께 읽습니다.",
+    details: ["주요 주장", "반복 표현", "이용자 반응"],
+  },
+  {
+    step: "03",
+    title: "CLASSIFY",
+    koreanTitle: "대응 필요 여부 분류",
+    summary: "노출 위치와 확산 속도를 기준으로 실제 대응이 필요한 우선순위를 나눕니다.",
+    details: ["일반 언급", "추가 확인", "긴급 대응"],
+  },
+  {
+    step: "04",
+    title: "RESPOND",
+    koreanTitle: "실행할 대응안 작성",
+    summary: "원문 보존부터 답변 문안, 채널별 실행 순서까지 하나의 대응안으로 정리합니다.",
+    details: ["원문 보존", "답변 문안", "실행 순서"],
+  },
+] as const;
+
 export function OwlDetailSteps() {
   const rootRef = useRef<HTMLElement>(null);
+  const [activeLabStep, setActiveLabStep] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -26,30 +58,11 @@ export function OwlDetailSteps() {
 
     const context = gsap.context(() => {
       const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const bridge = root.querySelector<HTMLElement>(".owl-report-bridge");
-      const report = root.querySelector<HTMLElement>(".owl-print-report");
-      const cover = root.querySelector<HTMLElement>(".owl-report-cover");
-      const paper = root.querySelector<HTMLElement>(".owl-report-paper");
-      const lights = gsap.utils.toArray<HTMLElement>(".owl-report-light", root);
       const sections = gsap.utils.toArray<HTMLElement>(".owl-detail-section", root);
       const tabs = gsap.utils.toArray<HTMLElement>(".owl-detail-tab", root);
-      if (!bridge || !report || !cover || !paper) return;
 
       if (!reduced) {
         gsap.set(tabs, { autoAlpha: 0 });
-        gsap.set(lights, { autoAlpha: 0.14 });
-        gsap.set(report, { autoAlpha: 0, xPercent: 36, yPercent: 36, scale: 0.28, rotate: -3 });
-        gsap.set(paper, { autoAlpha: 0 });
-        gsap.timeline({
-          scrollTrigger: { trigger: bridge, start: "top top", end: "+=2000", scrub: 0.9, pin: true, anticipatePin: 1, pinSpacing: true, invalidateOnRefresh: true },
-        })
-          .to(lights, { autoAlpha: 1, duration: 0.5, stagger: 0.13, ease: "power1.out" })
-          .to(report, { autoAlpha: 1, xPercent: 0, yPercent: 0, scale: 0.67, rotate: 0, duration: 1.05, ease: "power2.out" }, ">-0.06")
-          .to({}, { duration: 0.35 })
-          .to(cover, { rotateY: -103, duration: 0.75, ease: "power2.inOut" })
-          .to(paper, { autoAlpha: 1, duration: 0.28 }, "<+0.18")
-          .to(".owl-report-scene", { autoAlpha: 0.18, duration: 0.7, ease: "power1.out" }, "<")
-          .to(report, { scale: 4.5, duration: 1.5, ease: "power2.inOut", transformOrigin: "50% 50%" });
 
         sections.forEach((section, index) => {
           const animated = section.querySelectorAll<HTMLElement>(".owl-reveal");
@@ -72,11 +85,39 @@ export function OwlDetailSteps() {
         });
       }
     }, root);
-    return () => context.revert();
+    const labTriggers = [
+      ".owl-collect-visual",
+      ".owl-review-document",
+      ".owl-classify-plant",
+      ".owl-plan-visual",
+    ];
+    const cleanupLabTriggers = labTriggers.flatMap((selector, index) => {
+      const trigger = root.querySelector<HTMLElement>(selector);
+      if (!trigger) return [];
+
+      const open = () => setActiveLabStep(index);
+      const close = () => setActiveLabStep(null);
+      trigger.addEventListener("pointerenter", open);
+      trigger.addEventListener("pointerleave", close);
+      trigger.addEventListener("focusin", open);
+      trigger.addEventListener("focusout", close);
+
+      return [
+        () => trigger.removeEventListener("pointerenter", open),
+        () => trigger.removeEventListener("pointerleave", close),
+        () => trigger.removeEventListener("focusin", open),
+        () => trigger.removeEventListener("focusout", close),
+      ];
+    });
+
+    return () => {
+      cleanupLabTriggers.forEach((cleanup) => cleanup());
+      context.revert();
+    };
   }, []);
 
   return <section ref={rootRef} className="owl-detail-flow" aria-label="COADS 온라인 평판 대응 상세 과정">
-    <ReportBridge />
+    <LabBooklet activeStep={activeLabStep} />
     <nav className="owl-detail-tabs" aria-label="대응 단계">{stepTabs.map((step, index) => <span className={`owl-detail-tab ${index === 0 ? "is-active" : ""}`} key={step}>{step}</span>)}</nav>
     <StepOne />
     <StepTwo />
@@ -94,6 +135,37 @@ function ReportBridge() {
       <div className="owl-report-cover"><i /><i /><i /><i /><span>COADS LAB REPORT</span><strong>온라인 평판 대응 과정</strong><small>COADS / RESPONSE PROCESS</small></div>
     </div>
   </section>;
+}
+
+function LabBooklet({ activeStep }: { activeStep: number | null }) {
+  const entry = activeStep === null ? null : labBooklets[activeStep];
+
+  return (
+    <aside className={`owl-lab-booklet ${entry ? "is-open" : ""}`} aria-live="polite" aria-hidden={!entry}>
+      <div className="owl-lab-booklet-shadow" aria-hidden="true" />
+      <div className="owl-lab-booklet-pages">
+        <section className="owl-lab-booklet-page owl-lab-booklet-page--left">
+          <span>COADS LAB</span>
+          <b>{entry?.step ?? "01"} / 04</b>
+          <strong>{entry?.title ?? "COLLECT"}</strong>
+          <i aria-hidden="true" />
+          <small>DIGITAL RISK PROCESS</small>
+        </section>
+        <section className="owl-lab-booklet-page owl-lab-booklet-page--right">
+          <p>{entry?.koreanTitle ?? "온라인 게시물 수집"}</p>
+          <strong>{entry?.summary ?? "채널별로 흩어진 언급을 빠짐없이 모읍니다."}</strong>
+          <ul>
+            {(entry?.details ?? labBooklets[0].details).map((detail) => <li key={detail}>{detail}</li>)}
+          </ul>
+        </section>
+        <div className="owl-lab-booklet-cover" aria-hidden="true">
+          <span>COADS</span>
+          <strong>LAB<br />REPORT</strong>
+          <small>OPEN PROCESS</small>
+        </div>
+      </div>
+    </aside>
+  );
 }
 
 function StepIntro({ number, title, lead, description, accent = "blue" }: { number: string; title: string; lead: ReactNode; description: string; accent?: string }) {
