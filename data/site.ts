@@ -19,7 +19,6 @@ import {
 export const navItems = [
   { href: "/about", label: "회사소개" },
   { href: "/services", label: "서비스" },
-  { href: "/solutions", label: "솔루션" },
   { href: "/cases", label: "사례연구" },
   { href: "/insights", label: "인사이트" }
 ];

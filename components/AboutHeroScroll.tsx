@@ -124,7 +124,13 @@ export function AboutHeroScroll() {
         }, "+=0.12")
         .to(dayMessage, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "power4.out" }, ">+0.1")
         .to({}, { duration: 0.9 })
-        .to(dayMessage, { width: compactViewport ? "100vw" : "34.5vw", duration: 1.12, ease: "power3.inOut" })
+        .to(dayMessage, {
+          width: compactViewport ? "100vw" : "34.5vw",
+          autoAlpha: compactViewport ? 0 : 1,
+          y: compactViewport ? -28 : 0,
+          duration: 1.12,
+          ease: "power3.inOut"
+        })
         .to(dayMessageTitle, { fontSize: compactViewport ? "10vw" : "6.15vw", duration: 1.12, ease: "power3.inOut" }, "<")
         .to(dayMessage, {
           duration: 0.001,

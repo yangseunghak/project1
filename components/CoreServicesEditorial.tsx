@@ -160,10 +160,10 @@ export function CoreServicesEditorial() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=2200",
+            end: "+=3400",
             pin: true,
             pinSpacing: true,
-            scrub: 1,
+            scrub: 1.4,
             invalidateOnRefresh: true
           }
         });
@@ -189,10 +189,10 @@ export function CoreServicesEditorial() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=1580",
+            end: "+=2400",
             pin: true,
             pinSpacing: true,
-            scrub: 0.8,
+            scrub: 1.25,
             invalidateOnRefresh: true
           }
         });

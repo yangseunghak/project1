@@ -49,16 +49,15 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
     const description = root.querySelector<HTMLElement>(".related-sequence-description");
     const closing = root.querySelector<HTMLElement>(".related-sequence-closing");
     const cards = gsap.utils.toArray<HTMLElement>(".related-content-card", root);
-    const inquiry = root.querySelector<HTMLElement>(".related-sequence-inquiry");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!searchBox || !searchLine || !count || !eyebrow || !description || !closing || !inquiry || !titleLines.length || cards.length !== 3) return;
+    if (!searchBox || !searchLine || !count || !eyebrow || !description || !closing || !titleLines.length || cards.length !== 3) return;
 
     const setFinalState = () => {
       count.textContent = "관련 콘텐츠 3건 확인";
       gsap.set(searchBox, { x: 0, y: 0, scale: 1, autoAlpha: 1 });
       gsap.set(searchLine, { scaleY: 1, transformOrigin: "top center" });
-      gsap.set([eyebrow, description, closing, inquiry, ...titleLines, ...cards], { autoAlpha: 1, x: 0, y: 0 });
+      gsap.set([eyebrow, description, closing, ...titleLines, ...cards], { autoAlpha: 1, x: 0, y: 0 });
     };
 
     const context = gsap.context(() => {
@@ -66,13 +65,11 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
         gsap.set(searchBox, { autoAlpha: 0 });
         gsap.set([eyebrow, description, closing, ...titleLines], { autoAlpha: 0 });
         gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-        gsap.set(inquiry, { autoAlpha: 0, x: 70 });
         if (active) {
           gsap.timeline()
             .to(cards[0], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" })
             .to(cards[1], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-            .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-            .to(inquiry, { autoAlpha: 1, x: 0, duration: 0.38, ease: "power3.out" }, "<+0.18");
+            .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2");
         }
         return;
       }
@@ -88,19 +85,16 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
       gsap.set([eyebrow, description, closing], { autoAlpha: 0, y: 28 });
       gsap.set(titleLines, { autoAlpha: 0, y: 54, clipPath: "inset(0 0 100% 0)" });
       gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-      gsap.set(inquiry, { autoAlpha: 0, x: 70 });
 
       const timeline = gsap.timeline({ paused: true });
 
       timeline
         .to(cards[0], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" })
         .to(cards[1], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-        .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-        .to(inquiry, { autoAlpha: 1, x: 0, duration: 0.38, ease: "power3.out" }, "<+0.18");
+        .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2");
 
       const replay = () => {
         gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-        gsap.set(inquiry, { autoAlpha: 0, x: 70 });
         timeline.restart();
       };
 
@@ -116,7 +110,6 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
         onLeaveBack: () => {
           timeline.pause(0);
           gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-          gsap.set(inquiry, { autoAlpha: 0, x: 70 });
         },
       });
     }, root);
@@ -171,7 +164,6 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
             </article>
           );
         })}
-        <p className="related-sequence-inquiry">이런 글이라면, 이제 지워야 할까요?<span>09:44</span></p>
       </div>
     </section>
   );

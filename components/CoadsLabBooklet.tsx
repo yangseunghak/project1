@@ -33,7 +33,13 @@ export function CoadsLabBooklet({ activeStep, open }: { activeStep: number; open
       <div className="owl-lab-booklet-shadow" aria-hidden="true" />
       <div className="owl-lab-booklet-pages">
         <figure className="owl-lab-booklet-spread">
-          <img src={`/labs${step}.png`} alt={`COADS LAB STEP ${step} 상세 페이지`} />
+          <img
+            src={`/labs${step}.png`}
+            alt={`COADS LAB STEP ${step} 상세 페이지`}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+          />
           <i aria-hidden="true" />
         </figure>
         <div className="owl-lab-booklet-cover" aria-hidden="true">
