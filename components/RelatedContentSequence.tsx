@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -33,7 +33,6 @@ const relatedCards = [
 
 export function RelatedContentSequence({ embedded = false, active = true }: { embedded?: boolean; active?: boolean }) {
   const rootRef = useRef<HTMLElement>(null);
-  const [activeCard, setActiveCard] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -118,7 +117,7 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
   }, [embedded, active]);
 
   return (
-    <section ref={rootRef} className={`related-sequence ${embedded ? "related-sequence--embedded" : ""} ${active ? "is-visible" : ""} ${activeCard !== null ? "is-card-active" : ""}`} aria-labelledby="related-sequence-title">
+    <section ref={rootRef} className={`related-sequence ${embedded ? "related-sequence--embedded" : ""} ${active ? "is-visible" : ""}`} aria-labelledby="related-sequence-title">
       <div className="related-sequence-search" aria-label="검색 결과 요약">
         <span>OO기업 대표</span>
         <strong className="related-sequence-count">관련 콘텐츠 0건</strong>
@@ -139,19 +138,13 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
       <div className="related-content-stage" aria-label="관련 콘텐츠 카드">
         {relatedCards.map((card, index) => {
           const detailId = `related-card-details-${index}`;
-          const isActive = activeCard === index;
           return (
-            <article key={card.kind} className={`related-content-card ${card.className} ${isActive ? "is-active" : ""}`}>
+            <article key={card.kind} className={`related-content-card ${card.className}`}>
               <button
                 type="button"
                 className="related-content-card-shell"
-                aria-expanded={isActive}
+                aria-expanded="true"
                 aria-controls={detailId}
-                onMouseEnter={() => setActiveCard(index)}
-                onMouseLeave={() => setActiveCard(null)}
-                onFocus={() => setActiveCard(index)}
-                onBlur={() => setActiveCard(null)}
-                onClick={() => setActiveCard((current) => current === index ? null : index)}
               >
                 <span className="related-card-kind">{card.kind}</span>
                 <strong>{card.title}</strong>

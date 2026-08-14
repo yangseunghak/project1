@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Layered COADS case-note owl</title>
+  <desc id="desc">A friendly cobalt and yellow owl with individually addressable wings, pupils and props.</desc>
+  <style>
+    .ink{stroke:#151515;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+  <g id="owl-character">
+    <g id="owl-wing-left" class="ink" fill="#245BFF" stroke-width="10">
+      <path d="M164 270c-38-11-77 11-94 54-15 40-3 87 32 116 38-23 61-60 62-102 1-23 1-45 0-68Z"/>
+      <path fill="none" d="M134 319c-22 13-36 35-40 62m48-29c-17 10-28 24-34 42"/>
+    </g>
+    <g id="owl-wing-right" class="ink" fill="#245BFF" stroke-width="10">
+      <path d="M348 270c38-11 77 11 94 54 15 40 3 87-32 116-38-23-61-60-62-102-1-23-1-45 0-68Z"/>
+      <path fill="none" d="M378 319c22 13 36 35 40 62m-48-29c17 10 28 24 34 42"/>
+    </g>
+    <g id="owl-base" class="ink" fill="none" stroke-width="10">
+      <path fill="#245BFF" d="M132 164 145 68l74 76c23-8 51-8 74 0l74-76 13 96c31 28 50 68 50 112 0 101-78 183-174 183S82 377 82 276c0-44 19-84 50-112Z"/>
+      <path fill="#FFF9E8" d="M115 246c7-69 64-118 141-118s134 49 141 118c7 75-36 150-141 176-105-26-148-101-141-176Z"/>
+      <path fill="#FFE36E" d="M256 224 225 247l31 23 31-23-31-23Z"/>
+      <path fill="#245BFF" d="M153 322c23-6 43 4 55 25-11 31-35 53-67 65-12-31-7-67 12-90Z"/>
+      <path fill="#245BFF" d="M359 322c-23-6-43 4-55 25 11 31 35 53 67 65 12-31 7-67-12-90Z"/>
+      <path fill="#FFE36E" d="M198 438c-8 15-20 24-37 28m41-18c3 9 9 17 18 23"/>
+      <path fill="#FFE36E" d="M314 438c8 15 20 24 37 28m-41-18c-3 9-9 17-18 23"/>
+      <path stroke="#D9D4C5" stroke-width="7" d="M216 313c13 12 26 17 40 17s27-5 40-17"/>
+      <path stroke="#D9D4C5" stroke-width="7" d="M205 348c17 13 34 19 51 19s34-6 51-19"/>
+    </g>
+    <g id="owl-eyes" class="ink" fill="none">
+      <circle cx="204" cy="192" r="61" fill="#FFFFFF" stroke-width="10"/>
+      <circle cx="308" cy="192" r="61" fill="#FFFFFF" stroke-width="10"/>
+      <path stroke-width="9" d="M265 181h-18"/>
+      <path stroke-width="8" d="M143 170c-19-16-36-19-52-10m278 10c19-16 36-19 52-10"/>
+      <g id="owl-pupil-left">
+        <circle cx="214" cy="199" r="25" fill="#245BFF" stroke-width="8"/>
+        <circle cx="220" cy="192" r="8" fill="#FFFFFF" stroke="none"/>
+      </g>
+      <g id="owl-pupil-right">
+        <circle cx="318" cy="199" r="25" fill="#245BFF" stroke-width="8"/>
+        <circle cx="324" cy="192" r="8" fill="#FFFFFF" stroke="none"/>
+      </g>
+    </g>
+    <g id="owl-magnifier" class="ink" fill="none" stroke-width="12">
+      <circle cx="391" cy="183" r="62" fill="#EAF2FF" fill-opacity=".42"/>
+      <path d="m349 228-61 65"/>
+      <path stroke="#245BFF" d="M349 228 324 255"/>
+      <circle cx="391" cy="183" r="42" stroke="#245BFF" stroke-width="5" opacity=".65"/>
+    </g>
+    <g id="owl-clipboard" class="ink" stroke-width="9" opacity="0">
+      <path fill="#FFF9E8" d="M65 267h133v165H65z"/>
+      <path fill="#FFE36E" d="M100 245h63c9 0 16 7 16 16v25H84v-25c0-9 7-16 16-16Z"/>
+      <path fill="none" d="M91 322h81m-81 35h81m-81 35h53"/>
+      <path fill="none" stroke="#245BFF" d="m151 389 12 12 23-30"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">COADS process connector</title>
+  <desc id="desc">A playful curved cobalt path connecting four process checkpoints.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M1 1 9 5 1 9" fill="none" stroke="#245BFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <path id="process-line" d="M90 115C250 15 355 55 390 165c38 119 135 120 226 24 93-98 248-83 268 34 20 117-103 157-202 196-111 43-112 138-12 175 96 36 229 11 389-83" fill="none" stroke="#245BFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+  <g fill="#FFF9E8" stroke="#245BFF" stroke-width="4">
+    <circle cx="90" cy="115" r="14"/>
+    <circle cx="407" cy="190" r="14"/>
+    <circle cx="884" cy="223" r="14"/>
+    <circle cx="650" cy="432" r="14"/>
+  </g>
+</svg>

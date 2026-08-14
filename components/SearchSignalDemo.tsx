@@ -39,7 +39,6 @@ export function SearchSignalDemo() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let scrollLocked = false;
     let unlockCall: gsap.core.Tween | null = null;
-    let shouldAutoAdvance = true;
     let sequenceTrigger: ScrollTrigger | null = null;
 
     const preventScroll = (event: Event) => {
@@ -171,17 +170,6 @@ export function SearchSignalDemo() {
         setShowCards(true);
         unlockCall = gsap.delayedCall(1.65, () => {
           unlockScroll();
-          if (!shouldAutoAdvance || !sequenceTrigger) return;
-
-          const nextSection = document.querySelector<HTMLElement>("#services-detail");
-          const nextSequence = ScrollTrigger.getById("services-problem-sequence");
-          window.requestAnimationFrame(() => {
-            if (nextSequence) {
-              window.scrollTo({ top: nextSequence.start + 1, behavior: "smooth" });
-              return;
-            }
-            nextSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-          });
         });
       });
 
@@ -193,11 +181,9 @@ export function SearchSignalDemo() {
         pinSpacing: true,
         anticipatePin: 1,
         onEnter: () => {
-          shouldAutoAdvance = true;
           replay();
         },
         onEnterBack: () => {
-          shouldAutoAdvance = false;
           replay();
         },
         onLeaveBack: () => {

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">COADS owl base</title>
+  <desc id="desc">Body, head, beak and feet layer for the COADS case-note owl.</desc>
+  <g fill="none" stroke="#151515" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#245BFF" d="M132 164 145 68l74 76c23-8 51-8 74 0l74-76 13 96c31 28 50 68 50 112 0 101-78 183-174 183S82 377 82 276c0-44 19-84 50-112Z"/>
+    <path fill="#FFF9E8" d="M115 246c7-69 64-118 141-118s134 49 141 118c7 75-36 150-141 176-105-26-148-101-141-176Z"/>
+    <path fill="#FFE36E" d="M256 224 225 247l31 23 31-23-31-23Z"/>
+    <path fill="#245BFF" d="M153 322c23-6 43 4 55 25-11 31-35 53-67 65-12-31-7-67 12-90Z"/>
+    <path fill="#245BFF" d="M359 322c-23-6-43 4-55 25 11 31 35 53 67 65 12-31 7-67-12-90Z"/>
+    <path fill="#FFE36E" d="M198 438c-8 15-20 24-37 28m41-18c3 9 9 17 18 23"/>
+    <path fill="#FFE36E" d="M314 438c8 15 20 24 37 28m-41-18c-3 9-9 17-18 23"/>
+    <path stroke="#D9D4C5" stroke-width="7" d="M216 313c13 12 26 17 40 17s27-5 40-17"/>
+    <path stroke="#D9D4C5" stroke-width="7" d="M205 348c17 13 34 19 51 19s34-6 51-19"/>
+  </g>
+</svg>

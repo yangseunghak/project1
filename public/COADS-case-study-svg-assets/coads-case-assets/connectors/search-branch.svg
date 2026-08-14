@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Search result branch connector</title>
+  <desc id="desc">A cobalt connector branching from an original post to four reposts.</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 9 5 1 9" fill="none" stroke="#245BFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="#245BFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path id="connector-main" d="M50 180H330c80 0 55-125 145-125h160" marker-end="url(#arrow-blue)"/>
+    <path id="connector-branch-2" d="M330 180h305" marker-end="url(#arrow-blue)"/>
+    <path id="connector-branch-3" d="M330 180c80 0 55 125 145 125h160" marker-end="url(#arrow-blue)"/>
+    <path id="connector-tail" d="M635 55h215c85 0 65 90 145 90h150" marker-end="url(#arrow-blue)"/>
+    <path d="M635 180h510" marker-end="url(#arrow-blue)"/>
+    <path d="M635 305h215c85 0 65-90 145-90h150" marker-end="url(#arrow-blue)"/>
+  </g>
+  <g fill="#245BFF">
+    <circle cx="330" cy="180" r="8"/>
+    <circle cx="635" cy="55" r="8"/>
+    <circle cx="635" cy="180" r="8"/>
+    <circle cx="635" cy="305" r="8"/>
+  </g>
+</svg>

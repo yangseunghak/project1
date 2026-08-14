@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" role="img" aria-labelledby="title desc">
+  <title id="title">Curved COADS arrow</title>
+  <desc id="desc">A compact hand-drawn cobalt arrow for cards and annotations.</desc>
+  <path d="M26 128c52-96 142-99 214-43 30 24 55 33 88 25" fill="none" stroke="#245BFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m302 81 31 28-34 22" fill="none" stroke="#245BFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

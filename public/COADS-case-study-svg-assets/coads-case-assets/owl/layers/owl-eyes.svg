@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">COADS owl eyes and glasses</title>
+  <desc id="desc">Eye layer with selectable pupil groups for animation.</desc>
+  <g fill="none" stroke="#151515" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="204" cy="192" r="61" fill="#FFFFFF" stroke-width="10"/>
+    <circle cx="308" cy="192" r="61" fill="#FFFFFF" stroke-width="10"/>
+    <path stroke-width="9" d="M265 181h-18"/>
+    <path stroke-width="8" d="M143 170c-19-16-36-19-52-10m278 10c19-16 36-19 52-10"/>
+    <g id="owl-pupil-left">
+      <circle cx="214" cy="199" r="25" fill="#245BFF" stroke-width="8"/>
+      <circle cx="220" cy="192" r="8" fill="#FFFFFF" stroke="none"/>
+    </g>
+    <g id="owl-pupil-right">
+      <circle cx="318" cy="199" r="25" fill="#245BFF" stroke-width="8"/>
+      <circle cx="324" cy="192" r="8" fill="#FFFFFF" stroke="none"/>
+    </g>
+  </g>
+</svg>

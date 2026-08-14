@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>COADS Case Asset Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <header class="demo-header">
+        <p>COADS CASE ASSETS</p>
+        <button id="replay" type="button">애니메이션 다시 보기</button>
+      </header>
+
+      <section class="hero">
+        <div>
+          <span class="label">OWL / MAGNIFIER</span>
+          <h1>같은 글이<br />또 보이네?</h1>
+          <p>SVG 파일은 Figma와 웹에서 모두 사용할 수 있습니다.</p>
+        </div>
+        <div class="owl-stage">
+          <img class="owl owl-magnifier" src="../owl/poses/owl-magnifier.svg" alt="돋보기를 든 COADS 부엉이" />
+          <svg class="scan-line" viewBox="0 0 620 260" aria-hidden="true">
+            <defs>
+              <marker id="demo-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M1 1 9 5 1 9" fill="none" stroke="#245BFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </marker>
+            </defs>
+            <path d="M20 190C160 10 270 30 330 122c56 85 132 91 262 10" marker-end="url(#demo-arrow)" />
+          </svg>
+        </div>
+      </section>
+
+      <section class="process">
+        <div class="process-copy">
+          <span class="label">OWL / CLIPBOARD</span>
+          <h2>확인한 내용을<br />하나씩 기록합니다.</h2>
+        </div>
+        <div class="process-art">
+          <img class="process-path" src="../connectors/process-path.svg" alt="네 단계를 연결하는 곡선" />
+          <img class="owl owl-clipboard" src="../owl/poses/owl-clipboard.svg" alt="클립보드를 든 COADS 부엉이" />
+          <ol>
+            <li><b>01</b><span>검색 결과 저장</span></li>
+            <li><b>02</b><span>원문 비교</span></li>
+            <li><b>03</b><span>자료 확인</span></li>
+            <li><b>04</b><span>요청 발송</span></li>
+          </ol>
+        </div>
+      </section>
+    </main>
+    <script src="./demo.js"></script>
+  </body>
+</html>

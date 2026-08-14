@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">COADS owl with clipboard</title>
+  <desc id="desc">Complete friendly owl pose for process and results sections.</desc>
+  <g fill="none" stroke="#151515" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#245BFF" stroke-width="10" d="M164 270c-38-11-77 11-94 54-15 40-3 87 32 116 38-23 61-60 62-102 1-23 1-45 0-68Z"/>
+    <path fill="#245BFF" stroke-width="10" d="M348 270c38-11 77 11 94 54 15 40 3 87-32 116-38-23-61-60-62-102-1-23-1-45 0-68Z"/>
+    <path fill="#245BFF" stroke-width="10" d="M132 164 145 68l74 76c23-8 51-8 74 0l74-76 13 96c31 28 50 68 50 112 0 101-78 183-174 183S82 377 82 276c0-44 19-84 50-112Z"/>
+    <path fill="#FFF9E8" stroke-width="10" d="M115 246c7-69 64-118 141-118s134 49 141 118c7 75-36 150-141 176-105-26-148-101-141-176Z"/>
+    <circle cx="204" cy="192" r="61" fill="#FFFFFF" stroke-width="10"/>
+    <circle cx="308" cy="192" r="61" fill="#FFFFFF" stroke-width="10"/>
+    <path stroke-width="9" d="M265 181h-18"/>
+    <circle cx="204" cy="203" r="25" fill="#245BFF" stroke-width="8"/>
+    <circle cx="210" cy="196" r="8" fill="#FFFFFF" stroke="none"/>
+    <circle cx="308" cy="203" r="25" fill="#245BFF" stroke-width="8"/>
+    <circle cx="314" cy="196" r="8" fill="#FFFFFF" stroke="none"/>
+    <path fill="#FFE36E" stroke-width="10" d="M256 224 225 247l31 23 31-23-31-23Z"/>
+    <path stroke="#D9D4C5" stroke-width="7" d="M205 348c17 13 34 19 51 19s34-6 51-19"/>
+    <path fill="#FFE36E" stroke-width="10" d="M198 438c-8 15-20 24-37 28m41-18c3 9 9 17 18 23m112-10c8 15 20 24 37 28m-41-18c-3 9-9 17-18 23"/>
+    <path fill="#FFF9E8" stroke-width="9" d="M63 276h145v164H63z"/>
+    <path fill="#FFE36E" stroke-width="9" d="M100 252h70c10 0 18 8 18 18v24H82v-24c0-10 8-18 18-18Z"/>
+    <path stroke-width="8" d="M92 329h87m-87 38h87m-87 38h53"/>
+    <path stroke="#245BFF" stroke-width="9" d="m151 401 12 12 24-31"/>
+  </g>
+</svg>

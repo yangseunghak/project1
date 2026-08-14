@@ -1,0 +1,285 @@
+/* COADS showcase animation layer */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.logo,
+.menu a,
+.top-cta,
+.btn {
+  transition:
+    transform .55s cubic-bezier(.22, 1, .36, 1),
+    color .55s ease,
+    background-color .55s ease,
+    border-color .55s ease,
+    box-shadow .55s ease;
+}
+
+.top-cta:hover,
+.btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(6, 24, 68, .16);
+}
+
+.hero .eyebrow {
+  animation: showcaseFadeUp 1.1s cubic-bezier(.22, 1, .36, 1) .15s both;
+}
+
+.hero h1 {
+  animation: showcaseTitleIn 1.35s cubic-bezier(.22, 1, .36, 1) .28s both;
+}
+
+.hero-rule {
+  transform-origin: left center;
+  animation: showcaseRuleIn 1.25s cubic-bezier(.22, 1, .36, 1) .55s both;
+}
+
+.hero .lead {
+  animation: showcaseFadeUp 1.15s cubic-bezier(.22, 1, .36, 1) .72s both;
+}
+
+.hero-actions {
+  animation: showcaseFadeUp 1.1s cubic-bezier(.22, 1, .36, 1) .92s both;
+}
+
+.metric {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: metricSlowIn 1.25s cubic-bezier(.22, 1, .36, 1) both;
+  transition:
+    transform .65s cubic-bezier(.22, 1, .36, 1),
+    background-color .65s ease,
+    box-shadow .65s ease;
+}
+
+.metric:nth-child(1) { animation-delay: .05s; }
+.metric:nth-child(2) { animation-delay: .22s; }
+.metric:nth-child(3) { animation-delay: .39s; }
+.metric:nth-child(4) { animation-delay: .56s; }
+
+.metric:hover {
+  transform: translateY(-6px);
+  background: #f8fbff;
+  box-shadow: 0 24px 50px rgba(8, 35, 72, .07);
+}
+
+.metric-line {
+  transform-origin: left center;
+  animation: metricLineIn 1.05s cubic-bezier(.22, 1, .36, 1) both;
+  transition: width .55s ease;
+}
+
+.metric:hover .metric-line {
+  width: 88px;
+}
+
+.metric .icon {
+  animation: iconSoftIn 1s cubic-bezier(.22, 1, .36, 1) both;
+  transition:
+    background-color .65s ease,
+    box-shadow .65s ease,
+    transform .65s cubic-bezier(.22, 1, .36, 1);
+}
+
+.metric:hover .icon {
+  transform: scale(1.04);
+  background: #eef6ff;
+  box-shadow: inset 0 0 34px rgba(24, 90, 219, .1);
+}
+
+.metric + .metric::before {
+  animation: diamondSlowIn .8s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.metric + .metric:nth-child(2)::before { animation-delay: .8s; }
+.metric + .metric:nth-child(3)::before { animation-delay: .95s; }
+.metric + .metric:nth-child(4)::before { animation-delay: 1.1s; }
+
+.service {
+  opacity: 0;
+  transform: translateY(28px);
+  animation: serviceBlockIn 1.25s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.service:nth-child(1) { animation-delay: .05s; }
+.service:nth-child(2) { animation-delay: .22s; }
+
+.visual {
+  clip-path: inset(0 100% 0 0);
+  opacity: 0;
+  animation: visualMaskOpen 1.75s cubic-bezier(.22, 1, .36, 1) .2s both;
+  transition: transform .75s cubic-bezier(.22, 1, .36, 1);
+}
+
+.service:nth-child(even) .visual {
+  clip-path: inset(0 0 0 100%);
+  animation-name: visualMaskOpenReverse;
+}
+
+.visual:hover {
+  transform: scale(1.02);
+}
+
+.visual::after {
+  transition: transform .75s cubic-bezier(.22, 1, .36, 1);
+}
+
+.visual:hover::after {
+  transform: translate3d(6px, 4px, 0);
+}
+
+.lines span {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: dataLineDraw 1.25s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.service:nth-child(even) .lines span {
+  transform-origin: right center;
+}
+
+.lines span:nth-child(1) { animation-delay: .45s; }
+.lines span:nth-child(2) { animation-delay: .63s; }
+.lines span:nth-child(3) { animation-delay: .81s; }
+.lines span:nth-child(4) { animation-delay: .99s; }
+.lines span:nth-child(5) { animation-delay: 1.17s; }
+
+.case-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: caseCardIn 1.05s cubic-bezier(.22, 1, .36, 1) both;
+  transition:
+    transform .6s cubic-bezier(.22, 1, .36, 1),
+    box-shadow .6s ease;
+}
+
+.case-card:nth-child(1) { animation-delay: .08s; }
+.case-card:nth-child(2) { animation-delay: .22s; }
+.case-card:nth-child(3) { animation-delay: .36s; }
+.case-card:nth-child(4) { animation-delay: .50s; }
+
+.case-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px rgba(8, 35, 72, .07);
+}
+
+@keyframes showcaseFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes showcaseTitleIn {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes showcaseRuleIn {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes metricSlowIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes metricLineIn {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes iconSoftIn {
+  from {
+    opacity: 0;
+    transform: scale(.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes diamondSlowIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) rotate(45deg) scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) rotate(45deg) scale(1);
+  }
+}
+
+@keyframes serviceBlockIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes visualMaskOpen {
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes visualMaskOpenReverse {
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes dataLineDraw {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes caseCardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

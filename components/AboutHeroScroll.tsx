@@ -59,8 +59,8 @@ export function AboutHeroScroll() {
       if (reduceMotion) {
         gsap.set(lines, { autoAlpha: 1, clearProps: "transform,opacity,visibility,filter,willChange" });
         gsap.set(nightStage, { autoAlpha: 1 });
-        gsap.set(sceneWipe, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)", backgroundColor: "#030303", mixBlendMode: "normal" });
-        gsap.set(dayWipe, { autoAlpha: 1, scale: 1 });
+        gsap.set(sceneWipe, { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)", backgroundColor: "#030303" });
+        gsap.set(dayWipe, { autoAlpha: 1, yPercent: 0 });
         gsap.set(dayMessage, { autoAlpha: 1 });
         gsap.set(ceoStage, { autoAlpha: 1 });
         gsap.set([ceoImage, ceoCopy], { autoAlpha: 1 });
@@ -71,11 +71,13 @@ export function AboutHeroScroll() {
         return;
       }
 
-      gsap.set([weSee, whatOthers], { x: -72, autoAlpha: 0, willChange: "transform, opacity" });
-      gsap.set(miss, { y: 28, autoAlpha: 0, filter: "blur(6px)", willChange: "transform, opacity, filter" });
+      gsap.set([weSee, whatOthers, miss], {
+        autoAlpha: 1,
+        clearProps: "transform,opacity,visibility,filter,willChange"
+      });
       gsap.set(nightStage, { autoAlpha: 0, scale: 1.04, willChange: "transform, opacity" });
-      gsap.set(sceneWipe, { autoAlpha: 1, clipPath: "inset(100% 0% 0% 0%)", willChange: "clip-path, background-color" });
-      gsap.set(dayWipe, { autoAlpha: 0, scale: 1.08, willChange: "transform, opacity" });
+      gsap.set(sceneWipe, { autoAlpha: 1, clipPath: "inset(100% 0% 0% 0%)", willChange: "clip-path" });
+      gsap.set(dayWipe, { autoAlpha: 1, yPercent: 100, willChange: "transform" });
       gsap.set(dayMessage, { autoAlpha: 0, y: 54, width: "100vw", right: "auto", filter: "blur(10px)", willChange: "transform, opacity, width" });
       gsap.set(ceoStage, { autoAlpha: 0, willChange: "opacity" });
       gsap.set([ceoImage, ceoCopy], { autoAlpha: 0, y: 42, willChange: "transform, opacity" });
@@ -97,14 +99,10 @@ export function AboutHeroScroll() {
           invalidateOnRefresh: true
         }
       })
-        .to(weSee, { x: 0, autoAlpha: 1, duration: 0.78, ease: "power3.out" })
-        .to(whatOthers, { x: 0, autoAlpha: 1, duration: 0.78, ease: "power3.out" }, "+=0.16")
-        .to(miss, { y: 0, autoAlpha: 1, filter: "blur(0px)", duration: 0.9, ease: "power2.out" }, "+=0.12")
         .to(nightStage, { autoAlpha: 1, scale: 1, duration: 1.35, ease: "power2.out" }, "+=0.58")
         .to({}, { duration: 1.25 })
         .to(title, { autoAlpha: 0, y: -36, duration: 0.65, ease: "power2.inOut" })
         .to(sceneWipe, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.58, ease: "power4.inOut" })
-        .set(sceneWipe, { backgroundColor: "#030303", mixBlendMode: "normal" })
         .to(nightStage, { autoAlpha: 0, duration: 0.28, ease: "power2.out" }, "<")
         .to(finalCopy, { autoAlpha: 1, y: 0, duration: 0.82, ease: "power3.out" }, "<+0.16")
         .to(finalCopy, { autoAlpha: 0, y: -24, duration: 0.56, ease: "power2.inOut" }, "+=1.25")
@@ -115,10 +113,9 @@ export function AboutHeroScroll() {
         .to(finalProtection, { autoAlpha: 1, y: 0, duration: 0.82, ease: "power3.out" }, "<+0.12")
         .to(finalProtection, { autoAlpha: 0, y: -20, duration: 0.72, ease: "power2.inOut" }, "+=1.5")
         .to(dayWipe, {
-          autoAlpha: 1,
-          scale: 1,
-          duration: 0.48,
-          ease: "power4.in",
+          yPercent: 0,
+          duration: 0.9,
+          ease: "power3.inOut",
           onStart: () => document.body.classList.add("about-day-header"),
           onReverseComplete: () => document.body.classList.remove("about-day-header")
         }, "+=0.12")
