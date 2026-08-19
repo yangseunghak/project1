@@ -26,8 +26,8 @@ export function ContactShowcase() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=1800",
-          scrub: 1,
+          end: "+=2750",
+          scrub: 1.4,
           pin: true,
           pinSpacing: true
         }

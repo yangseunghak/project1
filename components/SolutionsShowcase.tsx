@@ -47,8 +47,8 @@ export function SolutionsShowcase() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=3000",
-            scrub: 1,
+            end: "+=4600",
+            scrub: 1.4,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true
@@ -109,8 +109,8 @@ export function SolutionsShowcase() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: `+=${items.length * 720 + 1500}`,
-            scrub: 1,
+            end: `+=${items.length * 1050 + 2100}`,
+            scrub: 1.35,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true

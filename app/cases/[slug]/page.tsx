@@ -1,53 +1,199 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight } from "lucide-react";
-import { cases } from "@/data/site";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { CaseDetailProgress } from "@/components/CaseDetailProgress";
+import { CaseDetailStory } from "@/components/CaseDetailStory";
+import { caseNotes } from "@/data/caseNotes";
+import { buildCaseStudy } from "@/data/caseStudyDetails";
 
 export function generateStaticParams() {
-  return cases.map((item) => ({ slug: item.slug }));
+  return caseNotes.map((note) => ({ slug: note.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const item = cases.find((caseItem) => caseItem.slug === slug);
-  return { title: item?.title ?? "사례연구" };
+  const note = caseNotes.find((item) => item.slug === slug);
+  if (!note) return { title: "Case not found" };
+  const study = buildCaseStudy(note);
+  return { title: `${study.title} | COADS CASE NOTE`, description: study.summary };
+}
+
+async function LegacyCaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const index = caseNotes.findIndex((item) => item.slug === slug);
+  if (index < 0) notFound();
+
+  const study = buildCaseStudy(caseNotes[index]);
+  const previous = caseNotes[(index - 1 + caseNotes.length) % caseNotes.length];
+  const next = caseNotes[(index + 1) % caseNotes.length];
+
+  return (
+    <article className="case-study-detail" style={{ "--accent": study.accent } as React.CSSProperties}>
+      <CaseDetailProgress />
+
+      <header className="case-study-hero" data-case-section="1">
+        <div className="case-study-hero-copy">
+          <Link href="/cases" className="case-study-back"><ArrowLeft size={18} /> CASE ARCHIVE</Link>
+          <p>COADS CASE NOTE / {String(study.id).padStart(2, "0")}</p>
+          <h1>{study.title}</h1>
+          <strong>{study.summary}</strong>
+          <dl>
+            <div><dt>CLIENT</dt><dd>{study.clientLabel}</dd></div>
+            <div><dt>CHANNEL</dt><dd>{study.channels.join(" · ")}</dd></div>
+            <div><dt>DURATION</dt><dd>{study.duration}</dd></div>
+          </dl>
+        </div>
+        <div className={`case-study-search-window cover-${study.coverType}`}>
+          <b>SEARCH RESULT / {String(study.id).padStart(2, "0")}</b>
+          {[0, 1, 2].map((item) => <article key={item}><span>{study.situation.spreadEvents[item].channel}</span><strong>{item === 0 ? study.title : study.situation.spreadEvents[item].description}</strong><small>source.example.com/case/{study.id}-{item + 1}</small><time>{study.situation.spreadEvents[item].time}</time></article>)}
+        </div>
+        <div className="case-study-watermark" aria-hidden="true">{String(study.id).padStart(2, "0")}</div>
+      </header>
+
+      <section className="case-study-section case-study-situation" data-case-section="2">
+        <div className="case-study-section-heading"><p>01 / 상황</p><h2>{study.situation.headline}</h2><span>{study.situation.description}</span></div>
+        <div className="case-study-metrics">
+          <article><small>최초 게시</small><strong>{study.situation.firstPublishedAt}</strong></article>
+          {study.situation.metrics.map((metric) => <article key={metric.label}><small>{metric.label}</small><strong>{metric.value}</strong></article>)}
+        </div>
+        <div className="case-study-spread"><i />{study.situation.spreadEvents.map((event) => <article key={`${event.channel}-${event.time}`}><time>{event.time}</time><b>{event.channel}</b><span>{event.description}</span></article>)}</div>
+      </section>
+
+      <section className="case-study-section case-study-actions" data-case-section="3">
+        <div className="case-study-section-heading"><p>02 / COADS가 한 일</p><h2>확인할 것과 실행할 것을 나눠 순서대로 처리했습니다.</h2></div>
+        <div className="case-study-action-grid">
+          <div>{study.actions.map((action) => <article key={action.title}><h3>{action.title}</h3><p>{action.description}</p></article>)}</div>
+          <aside><small>제출 자료</small>{study.deliverables.map((item) => <span key={item}>{item}</span>)}</aside>
+        </div>
+      </section>
+
+      <section className="case-study-section case-study-evidence" data-case-section="4">
+        <div className="case-study-section-heading"><p>03 / 증빙 자료</p><h2>판단에 사용한 자료와 표현의 변화를 함께 기록했습니다.</h2></div>
+        <div className="case-study-comparison">
+          <article><small>{study.comparison.originalLabel}</small><p>{study.comparison.originalText}</p></article>
+          <ArrowRight aria-hidden="true" />
+          <article><small>{study.comparison.changedLabel}</small><p>{study.comparison.changedText.split(new RegExp(`(${study.comparison.addedPhrases.join("|")})`, "g")).map((part, i) => study.comparison.addedPhrases.includes(part) ? <mark key={i}>{part}</mark> : part)}</p></article>
+        </div>
+        <p className="case-study-evidence-note">{study.comparison.note}</p>
+        <div className="case-study-evidence-list">{study.evidence.map((item) => <article key={item.id}><b>{item.id}</b><span>{item.name}</span><time>{item.recordedAt}</time></article>)}</div>
+      </section>
+
+      <section className="case-study-section case-study-results" data-case-section="5">
+        <div className="case-study-section-heading"><p>04 / {study.duration}</p><h2>확인한 게시물과 남아 있는 노출을 다시 점검했습니다.</h2><span>{study.resultDescription}</span></div>
+        <div className="case-study-result-grid">{study.results.map((result) => <article key={result.label}><small>{result.label}</small>{result.before && <del>{result.before}</del>}<strong>{result.after}</strong></article>)}</div>
+      </section>
+
+      <footer className="case-study-pagination">
+        <Link href={`/cases/${previous.slug}`}><ArrowLeft /><small>PREVIOUS CASE</small><strong>{previous.title}</strong></Link>
+        <Link href="/cases"><small>CASE ARCHIVE</small></Link>
+        <Link href={`/cases/${next.slug}`}><small>NEXT CASE</small><strong>{next.title}</strong><ArrowRight /></Link>
+      </footer>
+    </article>
+  );
+}
+
+async function LegacyEditorialCaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const index = caseNotes.findIndex((item) => item.slug === slug);
+  if (index < 0) notFound();
+
+  const study = buildCaseStudy(caseNotes[index]);
+  const previous = caseNotes[(index - 1 + caseNotes.length) % caseNotes.length];
+  const next = caseNotes[(index + 1) % caseNotes.length];
+
+  return (
+    <article className="case-study-detail case-study-detail--editorial" style={{ "--accent": study.accent } as React.CSSProperties}>
+      <CaseDetailProgress />
+
+      <header className="case-study-hero" data-case-section="1">
+        <div className="case-study-hero-copy">
+          <Link href="/cases" className="case-study-back"><ArrowLeft size={17} /> 사례 연구 아카이브</Link>
+          <p>CASE STUDY / {String(study.id).padStart(2, "0")}</p>
+          <h1>{study.title}</h1>
+          <strong>{study.summary}</strong>
+        </div>
+        <aside className="case-study-brief" aria-label="사례 기본 정보">
+          <span>CASE BRIEF</span>
+          <dl>
+            <div><dt>CLIENT TYPE</dt><dd>{study.clientLabel}</dd></div>
+            <div><dt>CHANNELS</dt><dd>{study.channels.join(" · ")}</dd></div>
+            <div><dt>REVIEW PERIOD</dt><dd>{study.duration}</dd></div>
+          </dl>
+          <b>문제 게시물은 한 번에 같은 방식으로 처리하지 않습니다. 사실 확인 범위와 채널 기준을 먼저 정리합니다.</b>
+        </aside>
+        <div className="case-study-watermark" aria-hidden="true">{String(study.id).padStart(2, "0")}</div>
+      </header>
+
+      <section className="case-study-section case-study-situation" data-case-section="2">
+        <div className="case-study-section-heading">
+          <p>01 / SITUATION REVIEW</p>
+          <h2>{study.situation.headline}</h2>
+          <span>{study.situation.description}</span>
+        </div>
+        <div className="case-study-metrics" aria-label="사례 현황">
+          <article><small>최초 확인</small><strong>{study.situation.firstPublishedAt}</strong></article>
+          {study.situation.metrics.map((metric) => <article key={metric.label}><small>{metric.label}</small><strong>{metric.value}</strong></article>)}
+        </div>
+        <div className="case-study-spread" aria-label="확산 확인 흐름">
+          <i />
+          {study.situation.spreadEvents.map((event) => <article key={`${event.channel}-${event.time}`}><time>{event.time}</time><b>{event.channel}</b><span>{event.description}</span></article>)}
+        </div>
+      </section>
+
+      <section className="case-study-section case-study-actions" data-case-section="3">
+        <div className="case-study-section-heading">
+          <p>02 / RESPONSE DESIGN</p>
+          <h2>무엇을 확인하고, 무엇을 요청할지 구분한 뒤 실행합니다.</h2>
+        </div>
+        <div className="case-study-action-grid">
+          <div>{study.actions.map((action) => <article key={action.title}><h3>{action.title}</h3><p>{action.description}</p></article>)}</div>
+          <aside><small>WORKING FILES</small>{study.deliverables.map((item) => <span key={item}>{item}</span>)}</aside>
+        </div>
+      </section>
+
+      <section className="case-study-section case-study-evidence" data-case-section="4">
+        <div className="case-study-section-heading">
+          <p>03 / EVIDENCE REVIEW</p>
+          <h2>원문과 재게시 문장을 비교해, 대응 근거를 남깁니다.</h2>
+        </div>
+        <div className="case-study-comparison">
+          <article><small>{study.comparison.originalLabel}</small><p>{study.comparison.originalText}</p></article>
+          <ArrowRight aria-hidden="true" />
+          <article><small>{study.comparison.changedLabel}</small><p>{study.comparison.changedText.split(new RegExp(`(${study.comparison.addedPhrases.join("|")})`, "g")).map((part, itemIndex) => study.comparison.addedPhrases.includes(part) ? <mark key={itemIndex}>{part}</mark> : part)}</p></article>
+        </div>
+        <p className="case-study-evidence-note">{study.comparison.note}</p>
+        <div className="case-study-evidence-list">{study.evidence.map((item) => <article key={item.id}><b>{item.id}</b><span>{item.name}</span><time>{item.recordedAt}</time></article>)}</div>
+      </section>
+
+      <section className="case-study-section case-study-results" data-case-section="5">
+        <div className="case-study-section-heading">
+          <p>04 / FOLLOW-UP LOG</p>
+          <h2>요청 이후에도 남은 노출과 새 게시물을 다시 확인합니다.</h2>
+          <span>{study.resultDescription}</span>
+        </div>
+        <div className="case-study-result-grid">{study.results.map((result) => <article key={result.label}><small>{result.label}</small>{result.before && <del>{result.before}</del>}<strong>{result.after}</strong></article>)}</div>
+      </section>
+
+      <footer className="case-study-pagination">
+        <Link href={`/cases/${previous.slug}`}><ArrowLeft /><small>PREVIOUS CASE</small><strong>{previous.title}</strong></Link>
+        <Link href="/cases"><small>사례 연구 아카이브</small></Link>
+        <Link href={`/cases/${next.slug}`}><small>NEXT CASE</small><strong>{next.title}</strong><ArrowRight /></Link>
+      </footer>
+    </article>
+  );
 }
 
 export default async function CaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = cases.find((caseItem) => caseItem.slug === slug);
-  if (!item) notFound();
-  const index = cases.findIndex((caseItem) => caseItem.slug === item.slug);
-  const next = cases[(index + 1) % cases.length];
+  const index = caseNotes.findIndex((item) => item.slug === slug);
+  if (index < 0) notFound();
 
   return (
-    <>
-      <section className="bg-white pt-36">
-        <div className="container-wide border-b border-[#E8EBEE] pb-16">
-          <p className="eyebrow">{item.industry} CASE</p>
-          <h1 className="section-title mt-5 max-w-5xl font-black text-[#071A2B]">{item.title}</h1>
-        </div>
-      </section>
-      <section className="section bg-[#F6F7F8]">
-        <div className="container-wide grid gap-8 lg:grid-cols-[.7fr_1.3fr]">
-          <aside className="border border-[#E0E5EA] bg-white p-8">
-            <h2 className="text-2xl font-black">프로젝트 개요</h2>
-            <p className="mt-4 leading-7 text-[#4B5158]">익명화된 {item.category} 리스크 대응 프로젝트입니다.</p>
-            <div className="mt-8 flex flex-wrap gap-2">{item.services.map((service) => <span key={service} className="bg-[#EEF3FF] px-3 py-2 text-sm font-bold text-[#185ADB]">{service}</span>)}</div>
-          </aside>
-          <article className="grid gap-6">
-            <Detail title="문제 상황" body={item.challenge} />
-            <Detail title="분석" body="초기 원문, 확산 게시물, 검색 노출 가능성, 이해관계자 반응을 나누어 검토했습니다." />
-            <Detail title="대응 전략" body={item.approach} />
-            <Detail title="결과" body={item.result} />
-            <Link href={`/cases/${next.slug}`} className="mt-6 inline-flex items-center gap-2 font-black text-[#185ADB]">다음 사례: {next.title} <ArrowRight size={18} /></Link>
-          </article>
-        </div>
-      </section>
-    </>
+    <CaseDetailStory
+      study={buildCaseStudy(caseNotes[index])}
+      previous={caseNotes[(index - 1 + caseNotes.length) % caseNotes.length]}
+      next={caseNotes[(index + 1) % caseNotes.length]}
+    />
   );
-}
-
-function Detail({ title, body }: { title: string; body: string }) {
-  return <section className="border border-[#E0E5EA] bg-white p-8"><h2 className="text-2xl font-black text-[#071A2B]">{title}</h2><p className="mt-4 leading-8 text-[#4B5158]">{body}</p></section>;
 }

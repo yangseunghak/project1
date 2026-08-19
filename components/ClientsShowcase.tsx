@@ -51,8 +51,8 @@ export function ClientsShowcase() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=2100",
-            scrub: 1,
+            end: "+=3200",
+            scrub: 1.4,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true
@@ -87,8 +87,8 @@ export function ClientsShowcase() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=1700",
-            scrub: 1,
+            end: "+=2550",
+            scrub: 1.35,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true
@@ -128,7 +128,7 @@ export function ClientsShowcase() {
       rows.forEach((row, index) => {
         gsap.to(row, {
           xPercent: index % 2 === 0 ? -50 : 50,
-          duration: index % 2 === 0 ? 16 : 18,
+          duration: index % 2 === 0 ? 23 : 26,
           ease: "none",
           repeat: -1
         });

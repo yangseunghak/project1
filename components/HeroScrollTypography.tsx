@@ -41,8 +41,8 @@ export function HeroScrollTypography() {
         scrollTrigger: {
           trigger: hero,
           start: "top top",
-          end: desktop ? "+=2200" : "+=1500",
-          scrub: 1,
+          end: desktop ? "+=3400" : "+=2300",
+          scrub: 1.4,
           pin: true,
           pinSpacing: true,
           refreshPriority: 2,

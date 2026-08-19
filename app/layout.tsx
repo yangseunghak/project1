@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { AosInit } from "@/components/AosInit";
 import { ScrollTopButton } from "@/components/ScrollTopButton";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
+import { RouteScrollReset } from "@/components/RouteScrollReset";
 
 export const metadata: Metadata = {
   title: {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body>
+        <RouteScrollReset />
         <AosInit />
         <ScrollProgressBar />
         <Header />

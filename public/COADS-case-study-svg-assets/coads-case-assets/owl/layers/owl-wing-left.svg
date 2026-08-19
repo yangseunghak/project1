@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">COADS owl left wing</title>
+  <desc id="desc">Separate left wing layer with a pivot near 154 284.</desc>
+  <g id="owl-wing-left" fill="#245BFF" stroke="#151515" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M164 270c-38-11-77 11-94 54-15 40-3 87 32 116 38-23 61-60 62-102 1-23 1-45 0-68Z"/>
+    <path fill="none" d="M134 319c-22 13-36 35-40 62m48-29c-17 10-28 24-34 42"/>
+  </g>
+</svg>

@@ -52,7 +52,7 @@ export function Header() {
             className="h-[34px] w-auto object-contain brightness-0 invert md:h-[38px]"
           />
         </Link>
-        <nav className="header-contrast hidden items-center gap-12 lg:flex" aria-label="Main navigation">
+        <nav className="header-contrast hidden items-center gap-16 lg:flex" aria-label="Main navigation">
           {headerNavItems.map((item) => (
             <Link key={item.href} className={`nav-link ${pathname === item.href ? "active" : ""}`} href={item.href}>
               {item.label}
@@ -84,7 +84,7 @@ export function Header() {
           </div>
           <nav className="container-wide flex min-h-[calc(100dvh-76px)] flex-col justify-center gap-3 pb-10" aria-label="Mobile navigation">
             {headerNavItems.map((item) => (
-              <Link key={item.href} className={`mobile-menu-link border-b py-5 text-[clamp(30px,9vw,48px)] font-black leading-none tracking-normal transition-colors ${pathname === item.href ? "border-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)} style={{ color: "#fff" }}>
+              <Link key={item.href} className={`mobile-menu-link border-b py-7 text-[clamp(38px,10vw,58px)] font-black leading-none tracking-normal transition-colors ${pathname === item.href ? "border-[#2f6bff]" : "border-white/20"}`} href={item.href} onClick={() => setOpen(false)} style={{ color: "#fff" }}>
                 {item.label}
               </Link>
             ))}

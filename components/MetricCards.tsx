@@ -34,7 +34,7 @@ export function MetricCards() {
             textContent: 0
           }, {
             textContent: target,
-            duration: 1.05,
+            duration: 1.45,
             ease: "power3.out",
             snap: { textContent: 1 },
             onUpdate: () => {
@@ -52,8 +52,8 @@ export function MetricCards() {
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=2200",
-            scrub: 1,
+            end: "+=3400",
+            scrub: 1.4,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true
@@ -93,8 +93,8 @@ export function MetricCards() {
           scrollTrigger: {
             trigger: section,
             start: "top top",
-            end: "+=1800",
-            scrub: 1,
+            end: "+=2700",
+            scrub: 1.35,
             pin: true,
             pinSpacing: true,
             invalidateOnRefresh: true

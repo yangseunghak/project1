@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -33,7 +33,6 @@ const relatedCards = [
 
 export function RelatedContentSequence({ embedded = false, active = true }: { embedded?: boolean; active?: boolean }) {
   const rootRef = useRef<HTMLElement>(null);
-  const [activeCard, setActiveCard] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -49,16 +48,15 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
     const description = root.querySelector<HTMLElement>(".related-sequence-description");
     const closing = root.querySelector<HTMLElement>(".related-sequence-closing");
     const cards = gsap.utils.toArray<HTMLElement>(".related-content-card", root);
-    const inquiry = root.querySelector<HTMLElement>(".related-sequence-inquiry");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!searchBox || !searchLine || !count || !eyebrow || !description || !closing || !inquiry || !titleLines.length || cards.length !== 3) return;
+    if (!searchBox || !searchLine || !count || !eyebrow || !description || !closing || !titleLines.length || cards.length !== 3) return;
 
     const setFinalState = () => {
       count.textContent = "관련 콘텐츠 3건 확인";
       gsap.set(searchBox, { x: 0, y: 0, scale: 1, autoAlpha: 1 });
       gsap.set(searchLine, { scaleY: 1, transformOrigin: "top center" });
-      gsap.set([eyebrow, description, closing, inquiry, ...titleLines, ...cards], { autoAlpha: 1, x: 0, y: 0 });
+      gsap.set([eyebrow, description, closing, ...titleLines, ...cards], { autoAlpha: 1, x: 0, y: 0 });
     };
 
     const context = gsap.context(() => {
@@ -66,13 +64,11 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
         gsap.set(searchBox, { autoAlpha: 0 });
         gsap.set([eyebrow, description, closing, ...titleLines], { autoAlpha: 0 });
         gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-        gsap.set(inquiry, { autoAlpha: 0, x: 70 });
         if (active) {
           gsap.timeline()
             .to(cards[0], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" })
             .to(cards[1], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-            .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-            .to(inquiry, { autoAlpha: 1, x: 0, duration: 0.38, ease: "power3.out" }, "<+0.18");
+            .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2");
         }
         return;
       }
@@ -88,19 +84,16 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
       gsap.set([eyebrow, description, closing], { autoAlpha: 0, y: 28 });
       gsap.set(titleLines, { autoAlpha: 0, y: 54, clipPath: "inset(0 0 100% 0)" });
       gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-      gsap.set(inquiry, { autoAlpha: 0, x: 70 });
 
       const timeline = gsap.timeline({ paused: true });
 
       timeline
         .to(cards[0], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" })
         .to(cards[1], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-        .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2")
-        .to(inquiry, { autoAlpha: 1, x: 0, duration: 0.38, ease: "power3.out" }, "<+0.18");
+        .to(cards[2], { autoAlpha: 1, x: 0, y: 0, duration: 0.58, ease: "power3.out" }, "<+0.2");
 
       const replay = () => {
         gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-        gsap.set(inquiry, { autoAlpha: 0, x: 70 });
         timeline.restart();
       };
 
@@ -116,7 +109,6 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
         onLeaveBack: () => {
           timeline.pause(0);
           gsap.set(cards, { autoAlpha: 0, x: 110, y: 34 });
-          gsap.set(inquiry, { autoAlpha: 0, x: 70 });
         },
       });
     }, root);
@@ -125,7 +117,7 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
   }, [embedded, active]);
 
   return (
-    <section ref={rootRef} className={`related-sequence ${embedded ? "related-sequence--embedded" : ""} ${active ? "is-visible" : ""} ${activeCard !== null ? "is-card-active" : ""}`} aria-labelledby="related-sequence-title">
+    <section ref={rootRef} className={`related-sequence ${embedded ? "related-sequence--embedded" : ""} ${active ? "is-visible" : ""}`} aria-labelledby="related-sequence-title">
       <div className="related-sequence-search" aria-label="검색 결과 요약">
         <span>OO기업 대표</span>
         <strong className="related-sequence-count">관련 콘텐츠 0건</strong>
@@ -146,19 +138,13 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
       <div className="related-content-stage" aria-label="관련 콘텐츠 카드">
         {relatedCards.map((card, index) => {
           const detailId = `related-card-details-${index}`;
-          const isActive = activeCard === index;
           return (
-            <article key={card.kind} className={`related-content-card ${card.className} ${isActive ? "is-active" : ""}`}>
+            <article key={card.kind} className={`related-content-card ${card.className}`}>
               <button
                 type="button"
                 className="related-content-card-shell"
-                aria-expanded={isActive}
+                aria-expanded="true"
                 aria-controls={detailId}
-                onMouseEnter={() => setActiveCard(index)}
-                onMouseLeave={() => setActiveCard(null)}
-                onFocus={() => setActiveCard(index)}
-                onBlur={() => setActiveCard(null)}
-                onClick={() => setActiveCard((current) => current === index ? null : index)}
               >
                 <span className="related-card-kind">{card.kind}</span>
                 <strong>{card.title}</strong>
@@ -171,7 +157,6 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
             </article>
           );
         })}
-        <p className="related-sequence-inquiry">이런 글이라면, 이제 지워야 할까요?<span>09:44</span></p>
       </div>
     </section>
   );

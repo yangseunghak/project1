@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 52" role="img" aria-labelledby="title desc">
+  <title id="title">Coral hand-drawn underline</title>
+  <desc id="desc">Two slightly irregular coral strokes for highlighting changed phrases.</desc>
+  <path d="M12 19c91 4 181-3 273 1 48 2 79 3 123-2" fill="none" stroke="#FF796D" stroke-width="7" stroke-linecap="round"/>
+  <path d="M22 37c76-2 154 1 230-1 59-2 98 2 145-1" fill="none" stroke="#FF796D" stroke-width="5" stroke-linecap="round" opacity=".72"/>
+</svg>

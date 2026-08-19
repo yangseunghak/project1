@@ -37,6 +37,34 @@ export function SearchSignalDemo() {
     const cards = gsap.utils.toArray<HTMLLIElement>(".search-signal-notification", root);
     const backgroundLines = gsap.utils.toArray<HTMLElement>(".search-signal-background-line", root);
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let scrollLocked = false;
+    let unlockCall: gsap.core.Tween | null = null;
+    let sequenceTrigger: ScrollTrigger | null = null;
+
+    const preventScroll = (event: Event) => {
+      if (scrollLocked) event.preventDefault();
+    };
+
+    const preventScrollKeys = (event: KeyboardEvent) => {
+      if (!scrollLocked || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) {
+        event.preventDefault();
+      }
+    };
+
+    const lockScroll = () => {
+      scrollLocked = true;
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
+      window.addEventListener("keydown", preventScrollKeys, { passive: false });
+    };
+
+    const unlockScroll = () => {
+      scrollLocked = false;
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      window.removeEventListener("keydown", preventScrollKeys);
+    };
 
     if (!query || !status || !count || !searchInterface || !background) return;
 
@@ -131,21 +159,36 @@ export function SearchSignalDemo() {
       });
 
       const replay = () => {
+        unlockCall?.kill();
+        lockScroll();
         setShowCards(false);
         reset();
         timeline.restart();
       };
 
-      ScrollTrigger.create({
+      timeline.eventCallback("onComplete", () => {
+        setShowCards(true);
+        unlockCall = gsap.delayedCall(1.65, () => {
+          unlockScroll();
+        });
+      });
+
+      sequenceTrigger = ScrollTrigger.create({
         trigger: root,
         start: "top top",
         end: () => window.matchMedia("(min-width: 769px)").matches ? "+=1500" : "+=1050",
         pin: true,
         pinSpacing: true,
         anticipatePin: 1,
-        onEnter: replay,
-        onEnterBack: replay,
+        onEnter: () => {
+          replay();
+        },
+        onEnterBack: () => {
+          replay();
+        },
         onLeaveBack: () => {
+          unlockCall?.kill();
+          unlockScroll();
           timeline.pause(0);
           setShowCards(false);
           reset();
@@ -157,6 +200,8 @@ export function SearchSignalDemo() {
 
     return () => {
       window.cancelAnimationFrame(refreshFrame);
+      unlockCall?.kill();
+      unlockScroll();
       context.revert();
     };
   }, []);

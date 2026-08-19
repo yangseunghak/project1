@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">COADS owl clipboard</title>
+  <desc id="desc">Separate clipboard prop aligned to the owl left side.</desc>
+  <g id="owl-clipboard" stroke="#151515" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#FFF9E8" d="M65 267h133v165H65z"/>
+    <path fill="#FFE36E" d="M100 245h63c9 0 16 7 16 16v25H84v-25c0-9 7-16 16-16Z"/>
+    <path fill="none" d="M91 322h81m-81 35h81m-81 35h53"/>
+    <path fill="none" stroke="#245BFF" d="m151 389 12 12 23-30"/>
+  </g>
+</svg>
