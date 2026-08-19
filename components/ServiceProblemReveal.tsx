@@ -9,6 +9,7 @@ import { CoadsLabBooklet } from "@/components/CoadsLabBooklet";
 export function ServiceProblemReveal() {
   const ref = useRef<HTMLElement>(null);
   const mobileTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [activeLabStep, setActiveLabStep] = useState(0);
   const [mobileLabStep, setMobileLabStep] = useState<number | null>(null);
   const [mobileLoadingStep, setMobileLoadingStep] = useState<number | null>(null);
 
@@ -80,11 +81,12 @@ export function ServiceProblemReveal() {
 
       let activeIndex = 0;
       const setActiveIndex = (index: number) => {
-        if (!counter || index === activeIndex) return;
+        if (index === activeIndex) return;
         activeIndex = index;
+        setActiveLabStep(index);
         closeMobileLab();
         if (lab) lab.dataset.activeStep = String(index + 1).padStart(2, "0");
-        counter.textContent = `${String(index + 1).padStart(2, "0")} / 04`;
+        if (counter) counter.textContent = `${String(index + 1).padStart(2, "0")} / 04`;
       };
 
       const setActiveHotspot = (index: number | null) => {
@@ -207,7 +209,16 @@ export function ServiceProblemReveal() {
         <div className="monitoring-scroll-status">
           <span className="monitoring-scroll-count">01 / 04</span>
           <span>SCROLL TO VIEW</span>
-          <span className="monitoring-scroll-hover-guide"><span className="guide-desktop">하이라이트 영역에 마우스를 올려보세요</span><span className="guide-mobile">하이라이트 영역을 터치해 보세요</span></span>
+          <span className="monitoring-scroll-hover-guide"><span className="guide-desktop">하이라이트 영역에 마우스를 올려보세요</span><span className="guide-mobile">현재 단계를 자세히 볼 수 있습니다</span></span>
+          <button
+            type="button"
+            className="monitoring-mobile-lab-open"
+            onClick={() => openMobileLab(activeLabStep)}
+            aria-label={`COADS LAB STEP ${String(activeLabStep + 1).padStart(2, "0")} 자세히 보기`}
+          >
+            <span>COADS LAB 열기</span>
+            <strong>STEP {String(activeLabStep + 1).padStart(2, "0")}</strong>
+          </button>
         </div>
       </div>
       <div className="container-wide services-page-problem-grid">

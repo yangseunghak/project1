@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const note = caseNotes.find((item) => item.slug === slug);
   if (!note) return { title: "Case not found" };
   const study = buildCaseStudy(note);
-  return { title: `${study.title} | COADS CASE NOTE`, description: study.summary };
+  return { title: `${study.report.title} | COADS CASE NOTE`, description: study.report.overview };
 }
 
 async function LegacyCaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -192,8 +192,8 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
   return (
     <CaseDetailStory
       study={buildCaseStudy(caseNotes[index])}
-      previous={caseNotes[(index - 1 + caseNotes.length) % caseNotes.length]}
-      next={caseNotes[(index + 1) % caseNotes.length]}
+      previous={caseNotes[index - 1] ?? null}
+      next={caseNotes[index + 1] ?? null}
     />
   );
 }

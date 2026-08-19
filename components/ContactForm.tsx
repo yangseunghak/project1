@@ -1,72 +1,181 @@
 "use client";
 
-import { useState } from "react";
-import { inquiryTypes, issueChannels } from "@/data/site";
+import { useRef, useState, type FormEvent } from "react";
+import {
+  ArrowRight,
+  FileText,
+  Link2,
+  MessageCircle,
+  MoreHorizontal,
+  Paperclip,
+  PlayCircle,
+  Plus,
+  Search,
+  UsersRound,
+} from "lucide-react";
 
-type State = "idle" | "success" | "error";
+const inquiryOptions = [
+  { value: "악성 게시물", icon: MessageCircle },
+  { value: "허위·왜곡 정보", icon: FileText },
+  { value: "커뮤니티 확산", icon: UsersRound },
+  { value: "검색 노출", icon: Search },
+  { value: "영상·SNS", icon: PlayCircle },
+  { value: "기타", icon: MoreHorizontal },
+] as const;
+
+type FormState = "idle" | "error" | "integration";
 
 export function ContactForm() {
-  const [state, setState] = useState<State>("idle");
+  const consentRef = useRef<HTMLInputElement>(null);
+  const [inquiryType, setInquiryType] = useState("");
+  const [message, setMessage] = useState("");
+  const [fileName, setFileName] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [state, setState] = useState<FormState>("idle");
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const clearStatus = () => {
+    if (state !== "idle") setState("idle");
+  };
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    if (!form.checkValidity() || !agreed) {
+    const firstInvalid = form.querySelector<HTMLElement>(":invalid");
+
+    if (firstInvalid || !agreed) {
       setState("error");
-      form.reportValidity();
+      if (firstInvalid) firstInvalid.focus();
+      else consentRef.current?.focus();
       return;
     }
-    setState("success");
-    form.reset();
-    setAgreed(false);
+
+    // 현재 프로젝트에는 문의를 전달할 API가 연결되어 있지 않아, 입력 데이터를 외부로 전송하지 않습니다.
+    setState("integration");
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-5 border border-[#E0E5EA] bg-white p-6 md:p-8" noValidate>
-      <div className="grid gap-5 md:grid-cols-2">
-        <Field label="이름" name="name" required />
-        <Field label="회사명" name="company" required />
-        <Field label="연락처" name="phone" required />
-        <Field label="이메일" name="email" type="email" required />
+    <form className="contact-inquiry-form" onSubmit={onSubmit} noValidate>
+      <fieldset className="contact-inquiry-types">
+        <legend>문의 유형</legend>
+        <div className="contact-inquiry-type-grid">
+          {inquiryOptions.map(({ value, icon: Icon }, index) => {
+            const selected = inquiryType === value;
+            return (
+              <label className={`contact-inquiry-type${selected ? " is-selected" : ""}`} key={value}>
+                <input
+                  type="radio"
+                  name="inquiryType"
+                  value={value}
+                  checked={selected}
+                  required={index === 0}
+                  onChange={(event) => {
+                    setInquiryType(event.target.value);
+                    clearStatus();
+                  }}
+                />
+                <Icon aria-hidden="true" size={27} strokeWidth={2.2} />
+                <span>{value}</span>
+              </label>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <div className="contact-inquiry-field-grid">
+        <InquiryField label="이름" name="name" autoComplete="name" placeholder="이름을 입력해주세요." required onInput={clearStatus} />
+        <InquiryField label="회사명 또는 소속" name="organization" autoComplete="organization" placeholder="회사명 또는 소속을 입력해주세요." onInput={clearStatus} />
+        <InquiryField label="연락처" name="phone" type="tel" autoComplete="tel" placeholder="연락처를 입력해주세요." required onInput={clearStatus} />
+        <InquiryField label="이메일" name="email" type="email" autoComplete="email" placeholder="이메일 주소를 입력해주세요." required onInput={clearStatus} />
       </div>
-      <div className="grid gap-5 md:grid-cols-3">
-        <Select label="문의 유형" name="type" options={inquiryTypes} required />
-        <Select label="이슈 발생 채널" name="channel" options={issueChannels} required />
-        <Select label="긴급도" name="urgency" options={["일반 검토", "빠른 상담 필요", "긴급 대응 필요"]} required />
+
+      <label className="contact-inquiry-field contact-inquiry-url-field">
+        <span>관련 URL</span>
+        <span className="contact-inquiry-url-input">
+          <Link2 aria-hidden="true" size={25} strokeWidth={2.2} />
+          <input name="url" type="url" inputMode="url" placeholder="관련 URL을 입력해주세요." onInput={clearStatus} />
+          <ArrowRight aria-hidden="true" size={31} strokeWidth={2.5} />
+        </span>
+      </label>
+
+      <label className="contact-inquiry-field contact-inquiry-message-field">
+        <span>문의 내용</span>
+        <span className="contact-inquiry-textarea-wrap">
+          <textarea
+            name="message"
+            required
+            minLength={10}
+            maxLength={1000}
+            value={message}
+            onChange={(event) => {
+              setMessage(event.target.value);
+              clearStatus();
+            }}
+            placeholder="발견 시점과 현재 상황을 편하게 적어주세요."
+          />
+          <small>{message.length} / 1,000</small>
+        </span>
+      </label>
+
+      <div className="contact-inquiry-file-field">
+        <Paperclip aria-hidden="true" size={25} strokeWidth={2.2} />
+        <strong>증빙자료 첨부</strong>
+        <span aria-hidden="true" className="contact-inquiry-file-divider" />
+        <label htmlFor="contact-proof-file" className="contact-inquiry-file-name">{fileName || "파일 선택"}</label>
+        <input
+          id="contact-proof-file"
+          name="evidence"
+          type="file"
+          onChange={(event) => {
+            setFileName(event.target.files?.[0]?.name ?? "");
+            clearStatus();
+          }}
+        />
+        <label htmlFor="contact-proof-file" className="contact-inquiry-file-add" aria-label="증빙자료 파일 선택">
+          <Plus aria-hidden="true" size={25} strokeWidth={2.5} />
+        </label>
       </div>
-      <label className="grid gap-2 font-bold text-[#071A2B]">
-        문의 내용
-        <textarea name="message" required minLength={10} className="min-h-44 border border-[#D8DEE4] p-4 font-normal text-[#101214]" placeholder="현재 상황, 확인된 채널, 필요한 대응 범위를 적어주세요." />
+
+      <label className="contact-inquiry-consent">
+        <input
+          ref={consentRef}
+          id="contact-consent"
+          type="checkbox"
+          checked={agreed}
+          required
+          onChange={(event) => {
+            setAgreed(event.target.checked);
+            clearStatus();
+          }}
+        />
+        <span>개인정보 수집 및 이용에 동의합니다.</span>
       </label>
-      <label className="flex items-start gap-3 text-sm leading-6 text-[#34383D]">
-        <input type="checkbox" checked={agreed} onChange={(event) => setAgreed(event.target.checked)} className="mt-1 min-h-5 min-w-5" />
-        개인정보 수집 및 상담 목적의 연락에 동의합니다. 전달 자료와 상담 내용은 안전하게 관리됩니다.
-      </label>
-      {state === "success" && <p className="border border-[#B8D5C1] bg-[#F0FAF3] p-4 font-bold text-[#1F6F3E]">문의가 접수되었습니다. 담당자가 내용을 검토한 뒤 연락드리겠습니다.</p>}
-      {state === "error" && <p className="border border-[#F0C5C5] bg-[#FFF4F4] p-4 font-bold text-[#A33A3A]">필수 항목과 개인정보 동의 여부를 확인해주세요.</p>}
-      <button type="submit" className="btn btn-blue justify-center">프로젝트 문의 제출</button>
+
+      <div className="contact-inquiry-status" aria-live="polite">
+        {state === "error" && <p id="contact-form-error">필수 항목과 개인정보 동의 여부를 확인해주세요.</p>}
+        {state === "integration" && <p>문의 전송 시스템이 아직 연결되지 않아 입력 내용은 전송되지 않았습니다.</p>}
+      </div>
+
+      <button type="submit" className="contact-inquiry-submit">
+        <span>무료상담 신청하기</span>
+        <i aria-hidden="true"><ArrowRight size={38} strokeWidth={2.3} /></i>
+      </button>
     </form>
   );
 }
 
-function Field({ label, name, type = "text", required = false }: { label: string; name: string; type?: string; required?: boolean }) {
+function InquiryField({ label, name, type = "text", autoComplete, placeholder, required = false, onInput }: {
+  label: string;
+  name: string;
+  type?: "text" | "email" | "tel";
+  autoComplete?: string;
+  placeholder: string;
+  required?: boolean;
+  onInput: () => void;
+}) {
   return (
-    <label className="grid gap-2 font-bold text-[#071A2B]">
-      {label}
-      <input name={name} type={type} required={required} className="min-h-12 border border-[#D8DEE4] px-4 font-normal text-[#101214]" />
-    </label>
-  );
-}
-
-function Select({ label, name, options, required = false }: { label: string; name: string; options: string[]; required?: boolean }) {
-  return (
-    <label className="grid gap-2 font-bold text-[#071A2B]">
-      {label}
-      <select name={name} required={required} className="min-h-12 border border-[#D8DEE4] bg-white px-4 font-normal text-[#101214]">
-        <option value="">선택</option>
-        {options.map((option) => <option key={option}>{option}</option>)}
-      </select>
+    <label className="contact-inquiry-field">
+      <span>{label}</span>
+      <input name={name} type={type} autoComplete={autoComplete} placeholder={placeholder} required={required} onInput={onInput} />
     </label>
   );
 }

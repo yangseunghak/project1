@@ -1,5 +1,27 @@
 import type { CaseNote } from "@/data/caseNotes";
 
+type CaseReportActionLog = { date: string; title: string; items: string[] };
+type CaseReportStep = { title: string; items: string[] };
+type CaseReportMetric = { label: string; before: number; after: number; suffix?: string };
+
+export type CaseReportDetail = {
+  title: string;
+  englishCategory: string;
+  clientType: string;
+  incident: string;
+  overview: string;
+  firstPost: { detectedAt: string; channel: string; type: string; content: string };
+  repost: { detectedAt: string; channel: string; content: string };
+  spread: { durationHours: number; channelCount: number; path: string[]; timeline: { time: string; description: string }[] };
+  changedClaims: string[];
+  evidence: string[];
+  actionLog: CaseReportActionLog[];
+  actionSteps: CaseReportStep[];
+  metrics: { period: string; spread: string; outcome: string };
+  chart: { negative: CaseReportMetric; highRisk: CaseReportMetric; official: CaseReportMetric; faq: CaseReportMetric; negativeSeries: number[]; highRiskSeries: number[] };
+  resultText: string;
+};
+
 export type CaseStudy = CaseNote & {
   industry: string;
   clientLabel: string;
@@ -25,6 +47,7 @@ export type CaseStudy = CaseNote & {
   };
   results: { label: string; before?: string; after: string }[];
   resultDescription: string;
+  report: CaseReportDetail;
 };
 
 const channelNames = ["검색", "커뮤니티", "SNS", "뉴스", "블로그", "영상"];
@@ -40,6 +63,7 @@ function buildLegacyCaseStudy(note: CaseNote): CaseStudy {
   const durationDays = 7 + (seed % 15);
   const channels = note.channels.length ? note.channels : [channelNames[seed % channelNames.length]];
   const primaryChannel = channels[0];
+  const profile = getDetailProfile(note.slug);
 
   const actions = [
     { title: `${note.title} 관련 상위 노출 결과 보존`, description: `${primaryChannel}와 검색 결과에서 확인된 URL, 게시 시각, 노출 위치를 동일한 기준으로 기록했습니다.` },
@@ -95,6 +119,13 @@ function buildLegacyCaseStudy(note: CaseNote): CaseStudy {
       { label: "후속 확인", before: "수시 확인", after: `${durationDays}일 기록 완료` },
     ],
     resultDescription: `삭제 여부만으로 종료하지 않고 남아 있는 게시물과 검색 노출 위치를 다시 확인했습니다. 처리되지 않은 내용은 사실관계와 요청 근거가 부족한 항목으로 분리해 무리한 조치를 진행하지 않았습니다.`,
+    report: buildCaseReportDetail(note, profile, {
+      day: (seed % 24) + 1,
+      relatedCount,
+      durationDays,
+      firstPublishedAt,
+      seed,
+    }),
   };
 }
 
@@ -241,6 +272,154 @@ function detailTime(hour: number, minute: number, offset: number) {
   return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 }
 
+function reportDate(day: number, offset = 0) {
+  return `08.${String(((day - 1 + offset) % 28) + 1).padStart(2, "0")}`;
+}
+
+function reportSeries(before: number, after: number) {
+  const delta = before - after;
+  return [before, Math.round(before - delta * .2), Math.round(before - delta * .46), Math.round(before - delta * .71), after];
+}
+
+function buildCaseReportDetail(
+  note: CaseNote,
+  profile: ReturnType<typeof getDetailProfile>,
+  values: { day: number; relatedCount: number; durationDays: number; firstPublishedAt: string; seed: number },
+): CaseReportDetail {
+  if (note.slug === "product-safety-community-spread") {
+    return {
+      title: "생활가전 A사 발열 제보가 커뮤니티로 확산된 사례",
+      englishCategory: "PRODUCT SAFETY · HOME APPLIANCE",
+      clientType: "생활가전 제조사",
+      incident: "충전 중 제품 온도가 높아졌다는 맘카페 사용 후기",
+      overview: "맘카페 게시글 1건이 48시간 안에 17개 채널로 재확산되며 제품 결함 의혹으로 번졌습니다.",
+      firstPost: {
+        detectedAt: "03.04 09:21",
+        channel: "맘카페",
+        type: "제품 사용 후기",
+        content: "충전 중인데 제품이 평소보다 뜨거워졌어요. 고객센터에 문의해봐야 할 것 같아요.",
+      },
+      repost: {
+        detectedAt: "03.04 11:07",
+        channel: "대형 커뮤니티",
+        content: "A사 제품 결함 의혹. 과열과 화재 위험이 있는 것 아니냐.",
+      },
+      spread: {
+        durationHours: 48,
+        channelCount: 17,
+        path: ["맘카페", "지역 커뮤니티", "대형 커뮤니티", "블로그", "SNS", "검색 결과"],
+        timeline: [
+          { time: "최초 3시간", description: "맘카페 4곳에 재게시" },
+          { time: "12시간", description: "대형 커뮤니티·블로그 확산" },
+          { time: "24시간", description: "SNS에서 과열·결함 키워드 증가" },
+          { time: "48시간", description: "17개 채널 관련 게시물 확인" },
+        ],
+      },
+      changedClaims: ["과열", "화재 위험", "제품 결함", "사용 중단", "폭발 우려", "전량 리콜"],
+      evidence: ["원문 게시물 캡처", "재유포 URL 목록", "제품 점검 기준", "고객센터 답변 기준", "FAQ 수정 이력", "검색 키워드 기록"],
+      actionLog: [
+        { date: "03.04", title: "원문 확보", items: ["최초 게시물 캡처", "최초 URL·게시 시각 기록", "재유포 URL 수집 시작"] },
+        { date: "03.05", title: "문장 비교", items: ["원문·재유포 문장 대조", "과장 표현 분류", "채널별 조회수 기록"] },
+        { date: "03.06", title: "사실관계 확인", items: ["제품 공지 확인", "점검 절차 확인", "확인된 내용·주장 분리"] },
+        { date: "03.07", title: "공지·FAQ 정리", items: ["제품 점검 안내문 수정", "고객 FAQ 작성", "상담 스크립트 정리"] },
+        { date: "03.08 이후", title: "후속 모니터링", items: ["검색 결과 추적", "새 과장 표현 확인", "28일 언급량 기록"] },
+      ],
+      actionSteps: [
+        { title: "원문 확보", items: ["최초 URL 확보", "작성 시각 기록", "원문 캡처 저장"] },
+        { title: "재유포 분리", items: ["재유포 게시물 수집", "과장 문구 비교", "중복 게시물 분류"] },
+        { title: "확산 경로 정리", items: ["채널별 순서 확인", "시간대별 현황 기록", "영향 채널 구분"] },
+        { title: "사실관계 확인", items: ["제품 공지 확인", "상담 기준 확인", "미확인 표현 분리"] },
+        { title: "공지·FAQ 정리", items: ["점검 안내 수정", "고객 FAQ 작성", "상담 문구 통일"] },
+        { title: "28일 모니터링", items: ["검색 키워드 확인", "재확산 확인", "고위험 게시물 추적"] },
+      ],
+      metrics: { period: "28일 모니터링", spread: "48시간 · 17개 채널", outcome: "4주 뒤 부정 언급 71% 감소" },
+      chart: {
+        negative: { label: "부정 언급", before: 5128, after: 1482, suffix: "건" },
+        highRisk: { label: "고위험 재유포", before: 842, after: 246, suffix: "건" },
+        official: { label: "공식 안내 검색 노출", before: 18, after: 67, suffix: "%" },
+        faq: { label: "FAQ 검색 노출", before: 9, after: 54, suffix: "%" },
+        negativeSeries: [5128, 4210, 3180, 2200, 1482],
+        highRiskSeries: [842, 680, 497, 326, 246],
+      },
+      resultText: "원문과 과장된 재유포 글을 분리해 대응한 결과, 4주 뒤 부정 언급이 71% 감소했습니다.",
+    };
+  }
+
+  const spreadHours = 24 + (values.seed % 4) * 12;
+  const channelCount = 6 + (values.seed % 14);
+  const firstChannel = note.channels[0] ?? profile.channels[0] ?? "확인 채널";
+  const path = Array.from(new Set([firstChannel, ...profile.channels, "검색 결과"])).slice(0, 6);
+  const negativeBefore = 2600 + values.seed * 73;
+  const reduction = 42 + ((values.seed * 3) % 27);
+  const negativeAfter = Math.round(negativeBefore * (100 - reduction) / 100);
+  const highRiskBefore = 180 + values.seed * 13;
+  const highRiskAfter = Math.round(highRiskBefore * (100 - reduction + 8) / 100);
+  const officialBefore = 12 + (values.seed % 14);
+  const officialAfter = Math.min(78, officialBefore + 28 + (values.seed % 13));
+  const faqBefore = 7 + (values.seed % 11);
+  const faqAfter = Math.min(72, faqBefore + 24 + (values.seed % 16));
+  const day = values.day;
+  const midTime = Math.max(12, Math.round(spreadHours * .25));
+  const lateTime = Math.max(midTime + 4, Math.round(spreadHours * .65));
+
+  return {
+    title: note.title,
+    englishCategory: `${note.category} · ${note.channels.join(" / ")}`.toUpperCase(),
+    clientType: profile.client,
+    incident: `${note.issue} 상황에서 ${profile.focus}`,
+    overview: `${note.title} 관련 게시물이 ${spreadHours}시간 동안 ${channelCount}개 채널로 이어지며 확인 전 표현이 반복됐습니다.`,
+    firstPost: {
+      detectedAt: values.firstPublishedAt.slice(5),
+      channel: firstChannel,
+      type: "최초 확인 게시물",
+      content: `${note.title}과 관련해 ${note.issue} 상황을 확인해 달라는 이용자 경험이 게시됐습니다.`,
+    },
+    repost: {
+      detectedAt: `${reportDate(day)} ${detailTime(10 + (values.seed % 5), 20, 70)}`,
+      channel: path[2] ?? path[1] ?? "재유포 채널",
+      content: `${note.title}이 ${profile.phrases[0]}로 이어졌다는 단정적인 문장이 재유포됐습니다.`,
+    },
+    spread: {
+      durationHours: spreadHours,
+      channelCount,
+      path,
+      timeline: [
+        { time: "최초 3시간", description: `${path.slice(0, 2).join("·")}에서 원문 확인` },
+        { time: `${midTime}시간`, description: `${path.slice(1, 3).join("·")} 재게시 확인` },
+        { time: `${lateTime}시간`, description: `${path.slice(2, 5).join("·")} 확산 기록` },
+        { time: `${spreadHours}시간`, description: `${channelCount}개 채널 게시물 확인` },
+      ],
+    },
+    changedClaims: [...profile.phrases, `${note.category} 문제`, "확인 전 단정"],
+    evidence: profile.records,
+    actionLog: [
+      { date: reportDate(day), title: "원문·URL 확보", items: ["최초 게시물 캡처", "URL·게시 시각 기록", "재유포 URL 수집 시작"] },
+      { date: reportDate(day, 1), title: "문장·채널 비교", items: ["원문·재게시 문장 대조", `${path.slice(0, 3).join("·")} 경로 기록`, "반복 표현 분류"] },
+      { date: reportDate(day, 2), title: "사실관계 확인", items: [profile.verification, "확인된 내용·추정 문장 분리"] },
+      { date: reportDate(day, 3), title: "안내·요청 정리", items: [profile.notice, "요청 URL과 근거 문장 정리"] },
+      { date: `${reportDate(day, 4)} 이후`, title: "후속 모니터링", items: [`${values.durationDays}일 재노출 기록`, "새 게시물·검색 노출 확인"] },
+    ],
+    actionSteps: [
+      { title: "원문 확보", items: ["최초 URL 확보", "게시 시각 기록", "원문 캡처 저장"] },
+      { title: "재유포 분리", items: ["재유포 URL 수집", "원문·변형 문장 비교", "중복 게시물 분류"] },
+      { title: "확산 경로 정리", items: ["채널 순서 기록", "시간대별 게시물 확인", "영향 채널 구분"] },
+      { title: "사실관계 확인", items: [profile.verification, "추정 문장 분리"] },
+      { title: "안내·요청 정리", items: [profile.notice, "플랫폼 요청 접수"] },
+      { title: `${values.durationDays}일 모니터링`, items: ["검색 노출 확인", "재확산 확인", "후속 URL 기록"] },
+    ],
+    metrics: { period: `${values.durationDays}일 모니터링`, spread: `${spreadHours}시간 · ${channelCount}개 채널`, outcome: `부정 언급 ${reduction}% 감소` },
+    chart: {
+      negative: { label: "부정 언급", before: negativeBefore, after: negativeAfter, suffix: "건" },
+      highRisk: { label: "고위험 재유포", before: highRiskBefore, after: highRiskAfter, suffix: "건" },
+      official: { label: "공식 안내 검색 노출", before: officialBefore, after: officialAfter, suffix: "%" },
+      faq: { label: "FAQ 검색 노출", before: faqBefore, after: faqAfter, suffix: "%" },
+      negativeSeries: reportSeries(negativeBefore, negativeAfter),
+      highRiskSeries: reportSeries(highRiskBefore, highRiskAfter),
+    },
+    resultText: `원문과 재유포 문장을 분리하고 ${values.durationDays}일 동안 후속 노출을 기록했습니다. 부정 언급은 ${reduction}% 줄었습니다.`,
+  };
+}
+
 export function buildCaseStudy(note: CaseNote): CaseStudy {
   const profile = getDetailProfile(note.slug);
   const seed = note.id;
@@ -255,9 +434,11 @@ export function buildCaseStudy(note: CaseNote): CaseStudy {
   const topic = note.title;
 
   const actions = [
-    { title: "원문·재게시 URL과 노출 위치 기록", description: `검색 결과와 ${profile.channels.slice(1, 3).join("·")}에서 확인한 URL ${relatedCount}건을 게시 시각, 계정, 제목 기준으로 정리했습니다.` },
-    ...profile.steps,
-    { title: "공식 안내 후 잔여 노출 재확인", description: `${profile.notice}를 공개한 뒤 ${durationDays}일 동안 같은 문구의 재노출, 수정 반영, 신규 게시 여부를 날짜별로 기록했습니다.` },
+    { title: "원문·재게시 URL 기록", description: `URL ${relatedCount}건의 게시 시각, 채널, 제목을 기록했습니다.` },
+    { title: "사실 확인 자료 대조", description: `${profile.verification}를 게시물 문장과 비교했습니다.` },
+    { title: "반복 문장 분류", description: "최초 문장과 재게시 과정에서 추가된 문장을 나눴습니다." },
+    { title: "플랫폼 요청 기준 정리", description: "요청할 URL과 근거 문장을 분리했습니다." },
+    { title: "수정·재노출 확인", description: `${durationDays}일 동안 수정 반영과 재노출을 기록했습니다.` },
   ].map((step, index) => ({ ...step, title: `${String(index + 1).padStart(2, "0")} / ${step.title}` }));
 
   return {
@@ -265,10 +446,10 @@ export function buildCaseStudy(note: CaseNote): CaseStudy {
     industry: profile.client,
     clientLabel: `${profile.client} · 익명 의뢰 ${String.fromCharCode(65 + (seed % 5))}`,
     duration: `${durationDays}일 모니터링`,
-    summary: `${profile.focus}가 반복 노출된 상황에서, 확인 자료와 플랫폼 정책을 기준으로 대응 범위를 정리한 사례입니다.`,
+    summary: `${note.title} 관련 게시물의 원문, 확산 채널, 요청 기록을 정리한 사례입니다.`,
     situation: {
-      headline: "처음에는 하나의 게시물이었지만, 재게시 과정에서 확인되지 않은 표현이 더해졌습니다.",
-      description: `${topic} 관련 글은 처음에는 개인의 경험 또는 질문에 가까웠습니다. 이후 제목과 댓글이 바뀌며 같은 내용이 여러 채널에 반복 노출됐고, COADS는 ${profile.verification}를 기준으로 대응이 필요한 문장만 추렸습니다.`,
+      headline: `${topic} 관련 게시물이 ${profile.channels[0]}에서 확인됐습니다.`,
+      description: `URL ${relatedCount}건을 ${profile.channels.join("·")}에서 확인했습니다. ${profile.verification}를 원문과 재게시 문장에 대조했습니다.`,
       firstPublishedAt,
       metrics: [
         { label: "확인 URL", value: `${relatedCount}건` },
@@ -294,7 +475,7 @@ export function buildCaseStudy(note: CaseNote): CaseStudy {
       changedLabel: "재게시 과정",
       changedText: profile.changed,
       addedPhrases: profile.phrases,
-      note: "확인되지 않은 비판이나 의견까지 일괄 요청하지 않고, 플랫폼 기준을 충족하는 URL과 문장만 분리해 요청했습니다.",
+      note: "확인 자료와 다른 문장만 요청 대상으로 정리했습니다.",
     },
     results: [
       { label: "기록 완료", before: "산발적 캡처", after: `URL ${relatedCount}건 정리` },
@@ -302,6 +483,13 @@ export function buildCaseStudy(note: CaseNote): CaseStudy {
       { label: "공식 안내", before: "문의 경로 분산", after: "확인 경로 1곳 운영" },
       { label: "후속 확인", before: "재노출 미확인", after: `${durationDays}일 추적` },
     ],
-    resultDescription: "삭제 여부만으로 종료하지 않았습니다. 요청 접수, 수정 반영, 남아 있는 검색 노출과 새로 생긴 재게시물을 같은 기록표에서 확인해, 추가 조치가 필요한 항목만 다음 대응으로 넘겼습니다.",
+    resultDescription: `요청 접수, 수정 반영, 재노출 여부를 ${durationDays}일 동안 기록했습니다.`,
+    report: buildCaseReportDetail(note, profile, {
+      day: Number(day),
+      relatedCount,
+      durationDays,
+      firstPublishedAt,
+      seed,
+    }),
   };
 }

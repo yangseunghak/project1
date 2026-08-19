@@ -90,12 +90,12 @@ export function AboutHeroScroll() {
         scrollTrigger: {
           trigger: hero,
           start: "top top",
-          end: "+=19600",
+          end: compactViewport ? "+=4800" : "+=7200",
           pin: true,
           pinType: "fixed",
           pinSpacing: true,
           anticipatePin: 1,
-          scrub: 2.2,
+          scrub: 0.9,
           invalidateOnRefresh: true
         }
       })
