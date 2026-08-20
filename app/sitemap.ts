@@ -3,6 +3,8 @@ import { cases, insights } from "@/data/site";
 
 const baseUrl = "https://coads-homepage.vercel.app";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = ["", "/about", "/services", "/solutions", "/cases", "/insights", "/contact"];
 
