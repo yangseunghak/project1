@@ -1,10 +1,51 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { navItems, partnerFields } from "@/data/site";
 
 export function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  useEffect(() => {
+    let frameId = 0;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const updateReveal = () => {
+      frameId = 0;
+      const remainingScroll = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+      const footerHeight = footerRef.current?.offsetHeight ?? 0;
+      // The fixed footer starts becoming visible as soon as the page reaches
+      // its reserved footer-height spacer, so begin the reveal at that edge.
+      const revealDistance = footerHeight;
+      const shouldReveal = reducedMotion || remainingScroll <= revealDistance;
+
+      setIsRevealed((current) => current === shouldReveal ? current : shouldReveal);
+    };
+
+    const requestUpdate = () => {
+      if (!frameId) frameId = window.requestAnimationFrame(updateReveal);
+    };
+
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+      if (frameId) window.cancelAnimationFrame(frameId);
+    };
+  }, []);
+
   return (
-    <footer className="coads-footer" aria-label="COADS footer">
+    <footer
+      ref={footerRef}
+      className={`coads-footer${isRevealed ? " is-revealed" : ""}`}
+      aria-label="COADS footer"
+    >
       <div className="container-wide coads-footer-layout">
         <div className="coads-footer-info">
           <div className="coads-footer-company-info">

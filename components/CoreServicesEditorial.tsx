@@ -219,7 +219,7 @@ export function CoreServicesEditorial() {
   }, []);
 
   return (
-    <section ref={ref} className="services-editorial" aria-labelledby="services-title" style={{ minHeight: "100svh", padding: 0 }}>
+    <section ref={ref} className="services-editorial" aria-labelledby="services-title" style={{ minHeight: "100dvh", padding: 0 }}>
       <div className="services-scroll-intro" aria-hidden>
         <span>OUR</span>
         <strong>&nbsp;SERVICE</strong>
@@ -236,7 +236,7 @@ export function CoreServicesEditorial() {
               position: "relative",
               minHeight: "inherit",
               width: (activeIndex === 0 && monitoringImageExpanded) || (activeIndex === 1 && analysisImageExpanded) || (activeIndex === 2 && riskImageExpanded) || (activeIndex === 3 && archiveImageExpanded) ? "min(40vw, 580px)" : "100%",
-              height: "min(780px, calc(100svh - 18px))",
+              height: "min(780px, calc(100dvh - 18px))",
               marginLeft: (activeIndex === 0 && monitoringImageExpanded) || (activeIndex === 1 && analysisImageExpanded) || (activeIndex === 2 && riskImageExpanded) || (activeIndex === 3 && archiveImageExpanded) ? "max(-72px, calc((100% - min(40vw, 580px)) / 2))" : 0,
               overflow: "hidden",
               borderRadius: 10,

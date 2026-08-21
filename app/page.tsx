@@ -9,7 +9,7 @@ import { SolutionsShowcase } from "@/components/SolutionsShowcase";
 
 export default function HomePage() {
   return (
-    <>
+    <div className="home-page">
       <section id="hero" className="coads-hero relative min-h-screen overflow-hidden bg-[#F8FBFF]">
         <video
           className="hero-bg-video"
@@ -38,7 +38,7 @@ export default function HomePage() {
       <ClientsShowcase />
 
       <ContactShowcase />
-    </>
+    </div>
   );
 }
 

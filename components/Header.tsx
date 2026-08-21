@@ -12,6 +12,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const isHomeTop = pathname === "/" && !scrolled && !open;
+  const isCasesArchive = pathname === "/cases";
   const headerNavItems = navItems.filter((item) => item.href !== "/insights");
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export function Header() {
   }, [open]);
 
   return (
-    <header className={`site-header fixed inset-x-0 top-0 z-50 translate-y-0 border-b border-transparent bg-transparent transition-all duration-500 ${open ? "mobile-menu-active" : ""} ${isHomeTop ? "py-8" : "py-4"}`}>
+    <header className={`site-header fixed inset-x-0 top-0 z-50 translate-y-0 border-b border-transparent bg-transparent transition-all duration-500 ${open ? "mobile-menu-active" : ""} ${isHomeTop ? "py-8" : "py-4"} ${isCasesArchive ? "case-archive-header" : ""}`}>
       <div className="container-wide flex items-center justify-between gap-8">
         <Link href="/" className="header-contrast flex min-h-11 items-center cursor-pointer" aria-label="Go to COADS home">
           <Image

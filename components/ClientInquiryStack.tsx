@@ -24,7 +24,6 @@ export function ClientInquiryStack() {
       const stackStage = root.querySelector<HTMLElement>(".inquiry-stack-stage");
       const stackLabel = root.querySelector<HTMLElement>(".inquiry-stack-label");
       const cards = gsap.utils.toArray<HTMLElement>(".inquiry-post-card", root);
-      const followUp = root.querySelector<HTMLElement>(".inquiry-follow-up");
       const answerStage = root.querySelector<HTMLElement>(".inquiry-answer-stage");
       const answerLabel = root.querySelector<HTMLElement>(".inquiry-answer-label");
       const answerLines = gsap.utils.toArray<HTMLElement>(".inquiry-answer-title > span", root);
@@ -32,7 +31,7 @@ export function ClientInquiryStack() {
       const checks = gsap.utils.toArray<HTMLElement>(".inquiry-answer-checks li", root);
       const media = gsap.matchMedia();
 
-      if (!introLabel || !introLabelLine || !introLines.length || !introCopy || !clientMessage || !clientMessageParts.length || !stackStage || !stackLabel || cards.length !== 3 || !followUp || !answerStage || !answerLabel || !answerLines.length || !answerCopy || !checks.length) return;
+      if (!introLabel || !introLabelLine || !introLines.length || !introCopy || !clientMessage || !clientMessageParts.length || !stackStage || !stackLabel || cards.length !== 3 || !answerStage || !answerLabel || !answerLines.length || !answerCopy || !checks.length) return;
 
       media.add("(min-width: 769px) and (prefers-reduced-motion: no-preference)", () => {
         gsap.set([introLabel, introCopy], { autoAlpha: 0, y: 24 });
@@ -42,8 +41,7 @@ export function ClientInquiryStack() {
         gsap.set(clientMessageParts, { autoAlpha: 0, y: 12 });
         gsap.set(stackStage, { yPercent: 100 });
         gsap.set(stackLabel, { autoAlpha: 0, y: 20 });
-        gsap.set(cards, { autoAlpha: 0, y: 180, scale: 0.94 });
-        gsap.set(followUp, { autoAlpha: 0, x: 40 });
+        gsap.set(cards, { clearProps: "transform,opacity,visibility" });
         gsap.set(answerStage, { yPercent: 100 });
         gsap.set([answerLabel, answerCopy], { autoAlpha: 0, y: 28 });
         gsap.set(answerLines, { autoAlpha: 0, y: 48, clipPath: "inset(0 0 100% 0)" });
@@ -72,15 +70,13 @@ export function ClientInquiryStack() {
           .to({}, { duration: 0.9 })
           .to(stackStage, { yPercent: 0, duration: 1.05, ease: "power3.inOut" })
           .to(stackLabel, { autoAlpha: 1, y: 0, duration: 0.48, ease: "power2.out" }, "<+0.22")
-          .to(cards[0], { autoAlpha: 1, y: 0, scale: 1, duration: 0.85, ease: "power3.out" }, "<+0.12")
+          .to({}, { duration: 0.85 }, "<+0.12")
           .to({}, { duration: 0.85 })
-          .to(cards[0], { y: -40, scale: 0.97, autoAlpha: 0.76, duration: 0.55, ease: "power2.out" })
-          .to(cards[1], { autoAlpha: 1, y: 0, scale: 1, duration: 0.85, ease: "power3.out" }, "<+0.08")
-          .to(followUp, { autoAlpha: 1, x: 0, duration: 0.58, ease: "power3.out" }, ">-0.15")
+          .to({}, { duration: 0.55 }, ">")
+          .to({}, { duration: 0.85 }, "<+0.08")
           .to({}, { duration: 0.7 })
-          .to(followUp, { autoAlpha: 0, x: 16, duration: 0.38, ease: "power2.in" })
-          .to(cards[1], { y: -38, scale: 0.97, autoAlpha: 0.76, duration: 0.55, ease: "power2.out" }, "<")
-          .to(cards[2], { autoAlpha: 1, y: 0, scale: 1, duration: 0.85, ease: "power3.out" }, "<+0.08")
+          .to({}, { duration: 0.55 }, "<")
+          .to({}, { duration: 0.85 }, "<+0.08")
           .to({}, { duration: 0.9 })
           .to(answerStage, { yPercent: 0, duration: 1.05, ease: "power3.inOut" })
           .to(answerLabel, { autoAlpha: 1, y: 0, duration: 0.46, ease: "power2.out" }, "<+0.28")
@@ -144,21 +140,20 @@ export function ClientInquiryStack() {
               <footer>전직원 · 서울</footer>
             </article>
 
-            <article className="inquiry-post-card inquiry-post-community inquiry-mobile-reveal">
+            <article className="inquiry-post-card inquiry-post-community inquiry-mobile-reveal" style={{ zIndex: 30 }}>
               <h3><span>Q.</span> OO기업 대표 관련 이야기, 사실인가요?</h3>
               <p className="inquiry-post-meta">익명 사용자 · 조회수 9,200 · 2026.08.05</p>
               <p className="inquiry-post-quote">정확한 입장은 아직 나오지 않았지만, 비슷한 이야기가 계속 올라오고 있습니다.</p>
               <footer>답변 4 · 공유 17</footer>
             </article>
 
-            <article className="inquiry-post-card inquiry-post-news inquiry-mobile-reveal">
+            <article className="inquiry-post-card inquiry-post-news inquiry-mobile-reveal" style={{ zIndex: 10 }}>
               <p className="inquiry-post-source"><i aria-hidden="true" />온라인 뉴스</p>
               <h3>OO기업 대표 관련 논란, 커뮤니티에서 확산</h3>
               <p className="inquiry-post-body">최근 온라인 커뮤니티를 중심으로 관련 게시물이 반복 노출되며 사실관계 확인을 요구하는 반응이 이어지고 있다…</p>
               <footer>2026.08.06 · 더보기</footer>
             </article>
           </div>
-          <aside className="inquiry-follow-up">이 글들부터 지워야 할까요?<span>09:44</span></aside>
         </div>
       </div>
 

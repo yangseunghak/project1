@@ -21,6 +21,7 @@ export function HeroScrollTypography() {
     if (!root || !hero) return;
 
     const phrases = gsap.utils.toArray<HTMLElement>(".hero-scroll-phrase", root);
+    const desktop = window.matchMedia("(min-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
       gsap.set(phrases, {
@@ -30,8 +31,6 @@ export function HeroScrollTypography() {
         scaleY: 0.72,
         transformOrigin: "50% 50%"
       });
-
-      const desktop = window.matchMedia("(min-width: 768px)").matches;
 
       if (!desktop) {
         gsap.set(phrases[0], { autoAlpha: 1, scaleY: 1 });
@@ -44,7 +43,9 @@ export function HeroScrollTypography() {
           end: desktop ? "+=3400" : "+=2300",
           scrub: 1.4,
           pin: true,
+          pinType: "fixed",
           pinSpacing: true,
+          anticipatePin: 1,
           refreshPriority: 2,
           invalidateOnRefresh: true
         }

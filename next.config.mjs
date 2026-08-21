@@ -5,7 +5,7 @@ const nextConfig = {
   turbopack: {
     root: process.cwd(),
   },
-  allowedDevOrigins: ["192.168.10.102"],
+  allowedDevOrigins: ["192.168.10.102", "127.0.0.1"],
   images: {
     unoptimized: true,
     remotePatterns: [

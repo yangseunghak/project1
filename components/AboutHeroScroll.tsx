@@ -1,14 +1,20 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function AboutHeroScroll() {
   const heroRef = useRef<HTMLElement>(null);
+  const [viewportModeVersion, setViewportModeVersion] = useState(0);
+
   useLayoutEffect(() => {
     const hero = heroRef.current;
     if (!hero) return;
+
+    const compactMedia = window.matchMedia("(max-width: 900px)");
+    const handleViewportModeChange = () => setViewportModeVersion((version) => version + 1);
+    compactMedia.addEventListener("change", handleViewportModeChange);
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -33,9 +39,15 @@ export function AboutHeroScroll() {
       if (!weSee || !whatOthers || !miss || !title || !nightStage || !sceneWipe || !dayWipe || !dayMessage || !dayMessageTitle || !ceoStage || !ceoImage || !ceoCopy || !finalCopy || !finalTrust || !finalStatement || !finalProtection || dayMessageLines.length !== 3) return;
 
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const compactViewport = window.matchMedia("(max-width: 900px)").matches;
+      const compactViewport = compactMedia.matches;
       const lines = [weSee, whatOthers, miss];
       dayMessage.classList.remove("is-ceo-layout");
+
+      // Mobile keeps the title as a self-contained scene. The desktop-only
+      // editorial move into the CEO spread causes oversized, clipped type on narrow screens.
+      if (compactViewport) {
+        gsap.set(dayMessageTitle, { clearProps: "fontSize" });
+      }
 
       const applyCeoTitleLayout = () => {
         if (compactViewport) return;
@@ -86,16 +98,21 @@ export function AboutHeroScroll() {
       gsap.set(finalStatement, { autoAlpha: 0, y: 30, willChange: "transform, opacity" });
       gsap.set(finalProtection, { autoAlpha: 0, y: 36, willChange: "transform, opacity" });
 
+      if (compactViewport) {
+        gsap.set(dayMessage, { width: "100%", left: 0, right: 0 });
+        gsap.set(dayMessageLines, { autoAlpha: 0, y: 56, willChange: "transform, opacity" });
+      }
+
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: hero,
           start: "top top",
-          end: compactViewport ? "+=4800" : "+=7200",
+          end: compactViewport ? "+=10000" : "+=15000",
           pin: true,
           pinType: "fixed",
           pinSpacing: true,
           anticipatePin: 1,
-          scrub: 0.9,
+          scrub: 1.5,
           invalidateOnRefresh: true
         }
       })
@@ -114,21 +131,28 @@ export function AboutHeroScroll() {
         .to(finalProtection, { autoAlpha: 0, y: -20, duration: 0.72, ease: "power2.inOut" }, "+=1.5")
         .to(dayWipe, {
           yPercent: 0,
-          duration: 0.9,
+          duration: 3.2,
           ease: "power3.inOut",
           onStart: () => document.body.classList.add("about-day-header"),
           onReverseComplete: () => document.body.classList.remove("about-day-header")
         }, "+=0.12")
-        .to(dayMessage, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "power4.out" }, ">+0.1")
+        .to(dayMessage, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 3.2, ease: "power4.out" }, ">+0.1")
+        .to(dayMessageLines, compactViewport
+          ? { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.32, ease: "power3.out" }
+          : { duration: 0.001 }
+        , "<+0.34")
         .to({}, { duration: 0.9 })
-        .to(dayMessage, {
-          width: compactViewport ? "100vw" : "34.5vw",
-          autoAlpha: compactViewport ? 0 : 1,
-          y: compactViewport ? -28 : 0,
-          duration: 1.12,
-          ease: "power3.inOut"
-        })
-        .to(dayMessageTitle, { fontSize: compactViewport ? "10vw" : "6.15vw", duration: 1.12, ease: "power3.inOut" }, "<")
+        .to(dayMessageLines, compactViewport
+          ? { autoAlpha: 0, y: -48, duration: 0.82, stagger: 0.14, ease: "power3.inOut" }
+          : { duration: 0.001 }
+        )
+        .to(dayMessage, compactViewport
+          ? { autoAlpha: 0, duration: 0.18, ease: "power2.inOut" }
+          : { width: "34.5vw", autoAlpha: 1, y: 0, duration: 1.12, ease: "power3.inOut" }
+        )
+        .to(dayMessageTitle, compactViewport
+          ? { duration: 0.001 }
+          : { fontSize: "6.15vw", duration: 1.12, ease: "power3.inOut" }, "<")
         .to(dayMessage, {
           duration: 0.001,
           onComplete: applyCeoTitleLayout,
@@ -147,11 +171,12 @@ export function AboutHeroScroll() {
     }, hero);
 
     return () => {
+      compactMedia.removeEventListener("change", handleViewportModeChange);
       heroRef.current?.querySelector(".about-day-message")?.classList.remove("is-ceo-layout");
       document.body.classList.remove("about-day-header");
       context.revert();
     };
-  }, []);
+  }, [viewportModeVersion]);
 
   return (
     <section ref={heroRef} className="about-hero" aria-labelledby="about-title">

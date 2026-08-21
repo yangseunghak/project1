@@ -138,8 +138,9 @@ export function RelatedContentSequence({ embedded = false, active = true }: { em
       <div className="related-content-stage" aria-label="관련 콘텐츠 카드">
         {relatedCards.map((card, index) => {
           const detailId = `related-card-details-${index}`;
+          const stackOrder = index === 1 ? 30 : index === 2 ? 10 : 20;
           return (
-            <article key={card.kind} className={`related-content-card ${card.className}`}>
+            <article key={card.kind} className={`related-content-card ${card.className}`} style={{ zIndex: stackOrder }}>
               <button
                 type="button"
                 className="related-content-card-shell"

@@ -47,7 +47,9 @@ export function SolutionsShowcase() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: "+=4600",
+            // Give every card a distinct scroll interval instead of letting a
+            // single wheel gesture advance through several cards at once.
+            end: "+=7800",
             scrub: 1.4,
             pin: true,
             pinSpacing: true,
@@ -109,7 +111,9 @@ export function SolutionsShowcase() {
           scrollTrigger: {
             trigger: root,
             start: "top top",
-            end: `+=${items.length * 1050 + 2100}`,
+            // Touch scrolls cover more distance than a desktop wheel tick.
+            // Reserve enough space for the intro plus each individual card.
+            end: `+=${items.length * 1800 + 3000}`,
             scrub: 1.35,
             pin: true,
             pinSpacing: true,

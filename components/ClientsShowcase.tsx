@@ -126,11 +126,20 @@ export function ClientsShowcase() {
       });
 
       rows.forEach((row, index) => {
-        gsap.to(row, {
-          xPercent: index % 2 === 0 ? -50 : 50,
+        const group = row.querySelector<HTMLElement>(".clients-track-group");
+        if (!group) return;
+
+        const direction = index % 2 === 0 ? -1 : 1;
+        const travel = () => group.getBoundingClientRect().width;
+
+        gsap.fromTo(row, {
+          x: () => direction < 0 ? 0 : -travel()
+        }, {
+          x: () => direction < 0 ? -travel() : 0,
           duration: index % 2 === 0 ? 23 : 26,
           ease: "none",
-          repeat: -1
+          repeat: -1,
+          repeatRefresh: true
         });
       });
 
@@ -167,15 +176,19 @@ export function ClientsShowcase() {
           {clientRows.map((row, rowIndex) => (
             <div key={rowIndex} className="clients-row">
               <div className="clients-track">
-                {[...row, ...row].map((client, index) => (
-                  <article key={`${client.name}-${index}`} className="client-logo-card">
-                    <span className="client-logo-mark" style={{ backgroundColor: client.tone }}>
-                      {client.mark}
-                    </span>
-                    <span className="client-logo-name" style={{ color: client.tone }}>
-                      {client.name}
-                    </span>
-                  </article>
+                {Array.from({ length: 3 }, (_, copyIndex) => (
+                  <div key={copyIndex} className="clients-track-group" aria-hidden={copyIndex > 0}>
+                    {row.map((client) => (
+                      <article key={`${client.name}-${copyIndex}`} className="client-logo-card">
+                        <span className="client-logo-mark" style={{ backgroundColor: client.tone }}>
+                          {client.mark}
+                        </span>
+                        <span className="client-logo-name" style={{ color: client.tone }}>
+                          {client.name}
+                        </span>
+                      </article>
+                    ))}
+                  </div>
                 ))}
               </div>
             </div>
