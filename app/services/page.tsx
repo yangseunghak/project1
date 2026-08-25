@@ -5,7 +5,12 @@ import { SearchSignalDemo } from "@/components/SearchSignalDemo";
 import { ServiceProblemReveal } from "@/components/ServiceProblemReveal";
 import { services } from "@/data/site";
 
-export const metadata: Metadata = { title: "서비스" };
+export const metadata: Metadata = {
+  title: "온라인 평판 관리 서비스",
+  description: "온라인 모니터링, 여론·리스크 분석, 디지털 증거 아카이빙, 위기 대응 전략, 평판 회복 관리 서비스를 제공합니다.",
+  alternates: { canonical: "/services" },
+  openGraph: { url: "/services", title: "온라인 평판 관리 서비스 | COADS", description: "탐지부터 분석, 증거화, 위기 대응까지 하나의 구조로 관리합니다." }
+};
 
 const reviewSignals = [
   ["01", "SEARCH", "검색 결과에서 반복되는 부정 키워드와 연관 콘텐츠를 확인합니다."],
