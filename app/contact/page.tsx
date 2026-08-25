@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { PageHero } from "@/components/PageHero";
 
-export const metadata: Metadata = { title: "프로젝트 문의" };
+export const metadata: Metadata = {
+  title: "무료 상담 문의",
+  description: "기업, 브랜드, 기관, 전문직의 온라인 평판과 여론 리스크 대응을 COADS에 안전하게 문의하세요.",
+  alternates: { canonical: "/contact" },
+  openGraph: { url: "/contact", title: "무료 상담 문의 | COADS", description: "온라인 평판 및 디지털 리스크 대응 범위를 함께 정리합니다." }
+};
 
 export default function ContactPage() {
   return (

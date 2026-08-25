@@ -2,15 +2,28 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { cases } from "@/data/site";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return cases.map((item) => ({ slug: item.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = cases.find((caseItem) => caseItem.slug === slug);
-  return { title: item?.title ?? "사례연구" };
+  if (!item) return { title: "사례연구" };
+  const description = `${item.challenge} ${item.result}`;
+  return {
+    title: item.title,
+    description,
+    alternates: { canonical: `/cases/${item.slug}` },
+    openGraph: {
+      url: `/cases/${item.slug}`,
+      title: `${item.title} | COADS`,
+      description,
+      type: "article"
+    }
+  };
 }
 
 export default async function CaseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -19,9 +32,19 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ slu
   if (!item) notFound();
   const index = cases.findIndex((caseItem) => caseItem.slug === item.slug);
   const next = cases[(index + 1) % cases.length];
+  const caseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: item.title,
+    description: item.challenge,
+    url: `https://coads-homepage.vercel.app/cases/${item.slug}`,
+    inLanguage: "ko-KR",
+    author: { "@type": "Organization", name: "COADS", url: "https://coads-homepage.vercel.app/" }
+  };
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(caseJsonLd).replace(/</g, "\\u003c") }} />
       <section className="bg-white pt-36">
         <div className="container-wide border-b border-[#E8EBEE] pb-16">
           <p className="eyebrow">{item.industry} CASE</p>

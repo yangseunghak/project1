@@ -1,15 +1,27 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { insights } from "@/data/site";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return insights.map((item) => ({ slug: item.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const item = insights.find((insight) => insight.slug === slug);
-  return { title: item?.title ?? "인사이트" };
+  if (!item) return { title: "인사이트" };
+  return {
+    title: item.title,
+    description: item.summary,
+    alternates: { canonical: `/insights/${item.slug}` },
+    openGraph: {
+      url: `/insights/${item.slug}`,
+      title: `${item.title} | COADS`,
+      description: item.summary,
+      type: "article"
+    }
+  };
 }
 
 export default async function InsightDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -17,8 +29,19 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
   const item = insights.find((insight) => insight.slug === slug);
   if (!item) notFound();
   const recommended = insights.filter((insight) => insight.slug !== item.slug).slice(0, 3);
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: item.title,
+    description: item.summary,
+    url: `https://coads-homepage.vercel.app/insights/${item.slug}`,
+    inLanguage: "ko-KR",
+    author: { "@type": "Organization", name: "COADS", url: "https://coads-homepage.vercel.app/" },
+    publisher: { "@type": "Organization", name: "COADS", logo: { "@type": "ImageObject", url: "https://coads-homepage.vercel.app/logo/coads-logo.png" } }
+  };
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c") }} />
       <section className="bg-white pt-36">
         <div className="container-wide border-b border-[#E8EBEE] pb-16">
           <p className="eyebrow">{item.category} · {item.read}</p>

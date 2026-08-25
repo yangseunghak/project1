@@ -90,6 +90,7 @@ export function HeroScrollTypography() {
   return (
     <div ref={rootRef} className="hero-scroll-typography" aria-label="WE READ DIGITAL RISKS COADS">
       <h1 className="hero-scroll-title">
+        <span className="sr-only">온라인 평판 관리 전문 솔루션 COADS</span>
         {heroPhrases.map((phrase) => (
           <span key={phrase.label} className="hero-scroll-phrase" aria-hidden="true">
             {phrase.content}
